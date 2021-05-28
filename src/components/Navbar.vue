@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar">
+    <div class="navbar gutter">
         <img
             class="logo"
             alt="epic road trip logo"
@@ -8,29 +8,132 @@
         <div>
             <v-row>
                 <v-col cols="12" sm="6" md="6">
-                    <v-text-field class="input" solo label="Address" align="center" hide-details="auto"></v-text-field>
+                    <v-text-field
+                        class="input"
+                        solo
+                        label="Address"
+                        align="center"
+                        hide-details="auto"
+                    ></v-text-field>
                 </v-col>
                 <v-col cols="12" sm="4" md="4">
                     <v-row>
                         <v-col cols="6" class="attached">
-                            <v-text-field solo label="Check-in" hide-details="auto"></v-text-field>
+                            <v-menu
+                                ref="menuIn"
+                                v-model="menuIn"
+                                :close-on-content-click="false"
+                                :return-value.sync="dateIn"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="formatedDateIn"
+                                        label="Check-in"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        solo
+                                        hide-details="auto"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="dateIn"
+                                    no-title
+                                    scrollable
+                                    locale="fr-FR"
+                                    :first-day-of-week="1"
+                                >
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="menuIn = false"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.menuIn.save(dateIn)"
+                                    >
+                                        OK
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-menu>
                         </v-col>
                         <v-col cols="6" class="attached">
-                            <v-text-field class="input" solo label="Check-out" hide-details="auto"></v-text-field>
+                            <v-menu
+                                ref="menuOut"
+                                v-model="menuOut"
+                                :close-on-content-click="false"
+                                :return-value.sync="dateOut"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-text-field
+                                        v-model="formatedDateOut"
+                                        label="Check-out"
+                                        readonly
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        solo
+                                        hide-details="auto"
+                                    ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                    v-model="dateOut"
+                                    no-title
+                                    scrollable
+                                    locale="fr-FR"
+                                    :first-day-of-week="1"
+                                >
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="menuOut = false"
+                                    >
+                                        Cancel
+                                    </v-btn>
+                                    <v-btn
+                                        text
+                                        color="primary"
+                                        @click="$refs.menuOut.save(dateOut)"
+                                    >
+                                        OK
+                                    </v-btn>
+                                </v-date-picker>
+                            </v-menu>
                         </v-col>
                     </v-row>
                 </v-col>
                 <v-col cols="12" sm="2" md="2">
-                    <v-text-field class="input" solo label="Budget" hide-details="auto"></v-text-field>
+                    <v-text-field
+                        class="input"
+                        solo
+                        label="Budget"
+                        hide-details="auto"
+                    ></v-text-field>
                 </v-col>
             </v-row>
         </div>
         <div class="user-section">
-            <v-btn depressed large>
-                My trips
-                <img src="../assets/heart.svg" />
-            </v-btn>
-            <v-btn depressed large color="primary"> Connexion </v-btn>
+            <v-row>
+                <v-col cols="6" sm="6" md="6">
+                    <v-btn depressed large>
+                        My trips
+                        <img src="../assets/heart.svg" />
+                    </v-btn>
+                </v-col>
+                <v-col cols="6" sm="6" md="6">
+                    <v-btn depressed large color="primary">Connexion</v-btn>
+                </v-col>
+            </v-row>
         </div>
     </div>
 </template>
@@ -38,6 +141,28 @@
 <script>
 export default {
     name: "Navbar",
+    data: () => ({
+        dateIn: new Date().toISOString().substr(0, 10),
+        dateOut: new Date().toISOString().substr(0, 10),
+        menuIn: false,
+        menuOut: false,
+    }),
+    computed: {
+        formatedDateIn () {
+            return this.formatDate(this.dateIn)
+        },
+        formatedDateOut () {
+            return this.formatDate(this.dateOut)
+        },
+    },
+    methods: {
+        formatDate (date) {
+            if (!date) return null;
+
+            const [year, month, day] = date.split("-");
+            return `${day}/${month}/${year}`;
+        }
+    },
 };
 </script>
 
@@ -67,8 +192,6 @@ export default {
 
     .user-section {
         button {
-            margin-right: 20px;
-            width: 140px;
             img {
                 height: 16px;
                 width: 16px;
@@ -91,6 +214,5 @@ export default {
             }
         }
     }
-
 }
 </style>

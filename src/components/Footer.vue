@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer gutter">
         <v-row>
             <v-col cols="12" sm="3" md="3">
                 <ul>
@@ -40,11 +40,14 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 60px 10vw;
-    margin: 50px -10vw 0 -10vw;
     background-color: var(--v-primary-base);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 200px;
 
     ul {
+        font-size: 14px;
         list-style-type: none;
         li {
             color: #fff;
@@ -56,12 +59,13 @@ export default {
 
     h1 {
         font-family: "Viga";
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         color: #fff;
     }
 
     span {
         color: #fff;
+        font-size: 12px;
     }
 }
 </style>

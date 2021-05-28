@@ -1,7 +1,9 @@
 <template>
     <v-app id="app">
         <Navbar />
-        <router-view />
+        <div class="content gutter">
+            <router-view />
+        </div>
         <Footer />
     </v-app>
 </template>
@@ -16,32 +18,28 @@ export default {
 </script>
 
 <style lang="scss">
-
 @font-face {
-  font-family: "Viga";
-  src: url(./assets/fonts/Viga-Regular.ttf) format("truetype");
+    font-family: "Viga";
+    src: url(./assets/fonts/Viga-Regular.ttf) format("truetype");
 }
 
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
+    font-family: Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    padding: 0 10vw;
     min-height: 100vh;
-}
 
-#nav {
-    padding: 30px;
+    .content {
+        padding-top: 70px;
+        padding-bottom: 350px;
+    }
 
-    a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-            color: #42b983;
-        }
+    .gutter {
+        padding-left: 10vw;
+        padding-right: 10vw;
     }
 }
+
 </style>

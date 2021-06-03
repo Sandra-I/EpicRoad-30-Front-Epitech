@@ -1,27 +1,27 @@
 <template>
     <div class="footer gutter">
         <v-row>
-            <v-col cols="12" sm="3" md="3">
-                <ul>
-                    <li>Homepage</li>
-                    <li>Legal mentions</li>
-                </ul>
-            </v-col>
-            <v-col cols="12" sm="3" md="3">
+            <v-col cols="12" xs="12" sm="4" md="2" lg="3">
                 <ul>
                     <li>Login</li>
                     <li>Register</li>
                     <li>Profile</li>
                 </ul>
             </v-col>
-            <v-col cols="12" sm="3" md="3">
+            <v-col cols="12" xs="12" sm="4" md="3" lg="3">
                 <ul>
                     <li>Accomodation in Paris</li>
                     <li>Restaurants in Paris</li>
                     <li>Activities in Paris</li>
                 </ul>
             </v-col>
-            <v-col cols="12" sm="3" md="3" class="text-right">
+            <v-col cols="12" xs="12" sm="4" md="3" lg="3">
+                <ul>
+                    <li>Homepage</li>
+                    <li>Legal mentions</li>
+                </ul>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="4" lg="3" class="logo">
                 <h1>Epic Road Trip</h1>
                 <span>© Copyright 2021</span>
             </v-col>
@@ -44,11 +44,18 @@ export default {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 200px;
+    min-height: 200px;
+    padding: 40px 0;
+
+    .logo {
+        text-align: right;
+    }
 
     ul {
         font-size: 14px;
         list-style-type: none;
+        padding: 0 !important;
+
         li {
             color: #fff;
             font-weight: 500;
@@ -66,6 +73,17 @@ export default {
     span {
         color: #fff;
         font-size: 12px;
+    }
+
+}
+
+@media screen and (max-width: 960px) {
+    .footer {
+        position: relative;
+        .logo {
+            margin-top: 10px;
+            text-align: left;
+        }
     }
 }
 </style>

@@ -9,7 +9,7 @@ const opts = {
         options: { customProperties: true },
         themes: {
             light: {
-                primary: '#377cff',
+                primary: '#0d65d9',
                 secondary: '#b0bec5',
                 accent: '#8c9eff',
                 error: '#b71c1c',

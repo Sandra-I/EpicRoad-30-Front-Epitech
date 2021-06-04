@@ -81,6 +81,9 @@
                     <a href="">See 18 additional activities ...</a>
                 </div>
             </div>
+            <div class="map">
+                <GoogleMap />
+            </div>
         </div>
     </div>
 </template>
@@ -88,12 +91,14 @@
 <script>
 import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
+import GoogleMap from '@/components/GoogleMap.vue'
 
 export default {
     name: "Result",
     components: {
         LocationRoute,
         ResultPreview,
+        GoogleMap
     },
     data: () => ({
         accomodations: [
@@ -236,6 +241,7 @@ a {
 
 .results {
     width: 50%;
+    padding-right: 50px;
     .result {
         &:not(:first-child) {
             margin-top: 100px;
@@ -268,6 +274,16 @@ a {
                 cursor: pointer;
             }
         }
+    }
+}
+
+.map {
+    padding-left: 50px;
+    width: calc(50% + 10vw);
+    margin-right: -10vw;
+    margin-bottom: -250px;
+    .vue-map {
+        border-radius: 20px 0 0 0;
     }
 }
 </style>

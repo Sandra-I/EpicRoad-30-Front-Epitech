@@ -4,9 +4,9 @@
     <div id="app">
       <v-row>
         <v-col
-          v-for="card in cards"
+          v-for="card in cardInformationArray"
           :key="card.title"
-          :cols="card.flex"
+          :cols=3
         >
           <v-card>
             <v-img
@@ -31,16 +31,9 @@ export default {
     titlePreviewBloc: {
       type: String,
       default: 'Le titre'
-    }
-  },
-  data () {
-    return {
-      cards: [
-        { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 },
-        { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/plane.jpg', flex: 3 }
-      ],
+    },
+    cardInformationArray: {
+      type: Array
     }
   }
 }

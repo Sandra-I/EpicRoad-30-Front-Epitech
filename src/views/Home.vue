@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <v-container fluid class="grey lighten-5">
-      <v-row v-for="n in 3" :key="n">
+      <v-row v-for="cardTitle in cardTitles" :key="cardTitle">
         <v-col>
-          <PreviewHomePage :cardInformationArray="cards"/>
+          <PreviewHomePage :titlePreviewBloc="cardTitle.title" :cardInformationArray="cards"/>
         </v-col>
       </v-row>
     </v-container>
@@ -22,6 +22,13 @@ export default {
   },
   data () {
     return {
+      cardTitles: [
+        { title: 'Enjoy your life' },
+        { title: 'Sleep like a dog' },
+        { title: 'Travel like a bird' },
+        { title: 'Eat enough' },
+        { title: 'Drink like a templar' }
+      ],
       cards: [
         { title: 'Favorite road trips', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
         { title: 'Best', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },

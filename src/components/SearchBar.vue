@@ -1,14 +1,7 @@
 <template>
     <div class="navbar gutter">
         <v-row justify="space-between"  align="center">
-            <!-- <v-col cols="1" xs="1" sm="1" md="1" lg="1">
-                <img
-                    class="logo"
-                    alt="epic road trip logo"
-                    src="../assets/worldwide.svg"
-                />
-            </v-col> -->
-            <v-col class="desktop" cols="8" xs="8" sm="8" md="9" lg="9">
+            <v-col class="desktop" cols="12" xs="12" sm="12" md="11" lg="11">
                 <v-row justify="center" align="center">
                     <v-col cols="5" xs="5" sm="5" md="4" lg="5">
                         <v-text-field
@@ -145,10 +138,10 @@ export default {
     }),
     computed: {
         formatedDateIn () {
-            return this.formatDate(this.dateIn)
+            return this.formatDate(this.dateIn);
         },
         formatedDateOut () {
-            return this.formatDate(this.dateOut)
+            return this.formatDate(this.dateOut);
         },
     },
     methods: {
@@ -173,43 +166,20 @@ export default {
     padding: 20px 0;
     margin-bottom: 50px;
 
-    button {
-        img {
-            height: 16px;
-            width: 16px;
-        }
-    }
-    
-    // .logo {
-    //     width: 40px;
-    //     height: 40px;
+    // .v-input {
+    //     border-radius: 30px;
+    //     .v-input__slot {
+    //         background: #f5f5f5 !important;
+    //         -webkit-box-shadow: none !important;
+    //         -moz-box-shadow: none !important;
+    //         box-shadow: none !important;
+    //         padding: 0 20px !important;
+    //     }
     // }
-
-    .v-input {
-        border-radius: 30px;
-        .v-input__slot {
-            background: #f5f5f5 !important;
-            -webkit-box-shadow: none !important;
-            -moz-box-shadow: none !important;
-            box-shadow: none !important;
-            padding: 0 20px !important;
-        }
-    }
 
     .search-btn {
         width: 45px !important;
         height: 45px !important;
-    }
-
-    .user-section {
-        text-align: right;
-        button {
-            margin-left: 30px;
-            img {
-                width: 25px;
-                height: 25px;
-            }
-        }
     }
 
     .attached {

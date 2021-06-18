@@ -85,10 +85,14 @@
                                 <v-divider></v-divider>
                         
                                 <v-card-actions>
-                                    <v-spacer></v-spacer>
                                     <v-btn
 										color="primary"
-										text
+                                    >
+                                    No account yet! Sign me in!
+                                    </v-btn>
+									<v-spacer></v-spacer>
+                                    <v-btn
+										color="primary"
 										@click="showDialog = false"
                                     >
                                     Log me
@@ -107,7 +111,7 @@
 export default {
     name: "Navbar",
     data: () => ({
-		showDialog: false
+		showDialog: true
     }),
     methods: {
         hideMobileMenu (isHidden) {

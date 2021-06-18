@@ -18,7 +18,84 @@
                         <v-btn icon large class="mobile" @click="hideMobileMenu(false)">
                             <img src="../assets/menu.svg" />
                         </v-btn>
-                        <v-btn depressed large color="primary" class="desktop">Login</v-btn>
+                        <v-dialog
+                            transition="dialog-bottom-transition"
+                            v-model="showDialog"
+                            width="700"
+                        >
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                    depressed
+                                    large
+                                    color="primary"
+                                    v-bind="attrs"
+                                    v-on="on"
+                                >
+                                    Login
+                                </v-btn>
+                            </template>
+                            <v-card>
+                                <v-card-title class="text-h5 grey lighten-2">
+                                    Log in or sign up
+                                </v-card-title>
+                        
+                                <v-card-text>
+									<v-container>
+										<v-row>
+											<v-col
+												cols="12"
+												sm="6"
+												md="4"
+											>
+												<v-text-field
+													label="First name*"
+													required
+												></v-text-field>
+											</v-col>
+											<v-col
+												cols="12"
+												sm="6"
+												md="4"
+											>
+												<v-text-field
+													label="Last name*"
+													required
+												></v-text-field>
+											</v-col>
+											<v-col cols="12">
+												<v-text-field
+													label="Email*"
+													required
+												></v-text-field>
+											</v-col>
+											<!-- TO DO: ajouter validator password + update hint -->
+											<v-col cols="12">
+												<v-text-field
+													label="Password*"
+													type="password"
+													hint="Password must contains ... "
+													required
+												></v-text-field>
+											</v-col>
+										</v-row>
+									</v-container>
+									<small>*fields required</small>
+                                </v-card-text>
+                        
+                                <v-divider></v-divider>
+                        
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn
+										color="primary"
+										text
+										@click="showDialog = false"
+                                    >
+                                    Log me
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
                     </v-row>
                 </v-col>
             </v-row> 
@@ -30,7 +107,7 @@
 export default {
     name: "Navbar",
     data: () => ({
-    
+		showDialog: false
     }),
     methods: {
         hideMobileMenu (isHidden) {

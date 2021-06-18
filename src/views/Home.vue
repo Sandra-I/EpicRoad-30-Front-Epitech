@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="grey lighten-5">
+  <v-container fluid>
     <v-row>
       <v-col>
         <h1>{{ homePageTitle | capitalize }}</h1>

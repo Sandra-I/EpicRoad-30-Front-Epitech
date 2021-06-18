@@ -1,27 +1,29 @@
 <template>
-    <div class="navbar gutter">
-        <v-row justify="space-between"  align="center">
-            <v-col cols="1" xs="1" sm="1" md="1" lg="1">
-                <img
-                    class="logo"
-                    alt="epic road trip logo"
-                    src="../assets/worldwide.svg"
-                />
-            </v-col>
-        
-            <v-col cols="3" xs="3" sm="3" md="2" lg="2" class="user-section">
-                <v-row align="center" justify="end">
-                    <v-btn icon large>
-                        <img src="../assets/heart.svg" />
-                    </v-btn>
-                    <v-btn icon large class="mobile" @click="hideMobileMenu(false)">
-                        <img src="../assets/menu.svg" />
-                    </v-btn>
-                    <v-btn depressed large color="primary" class="desktop">Login</v-btn>
-                </v-row>
-            </v-col>
-        </v-row>
-    </div>
+    <!-- <div class="navbar gutter"> -->
+        <v-app-bar class="navbar gutter">
+            <v-row justify="space-between"  align="center">
+                <v-col cols="1" xs="1" sm="1" md="1" lg="1">
+                    <img
+                        class="logo"
+                        alt="epic road trip logo"
+                        src="../assets/worldwide.svg"
+                    />
+                </v-col>
+            
+                <v-col cols="3" xs="3" sm="3" md="2" lg="2" class="user-section">
+                    <v-row align="center" justify="end">
+                        <v-btn icon large>
+                            <img src="../assets/heart.svg" />
+                        </v-btn>
+                        <v-btn icon large class="mobile" @click="hideMobileMenu(false)">
+                            <img src="../assets/menu.svg" />
+                        </v-btn>
+                        <v-btn depressed large color="primary" class="desktop">Login</v-btn>
+                    </v-row>
+                </v-col>
+            </v-row> 
+        </v-app-bar>
+    <!-- </div> -->
 </template>
 
 <script>
@@ -44,7 +46,8 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 20px 0;
-    margin-bottom: 50px;
+    height: fit-content !important;
+    // margin-bottom: 50px;
 
     button {
         img {

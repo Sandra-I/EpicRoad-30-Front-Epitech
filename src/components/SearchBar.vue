@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar gutter">
+    <div class="searchBar gutter">
         <v-row justify="space-between"  align="center">
             <v-col class="desktop" cols="12" xs="12" sm="12" md="11" lg="11">
                 <v-row justify="center" align="center">
@@ -150,16 +150,13 @@ export default {
 
             const [year, month, day] = date.split("-");
             return `${day}/${month}/${year}`;
-        },
-        hideMobileMenu (isHidden) {
-            return this.$emit("onHiddenMobileMenu", isHidden);
         }
     }
 };
 </script>
 
-<style lang="scss">
-.navbar {
+<style scoped lang="scss">
+.searchBar {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -182,6 +179,11 @@ export default {
         height: 45px !important;
     }
 
+    img {
+        height: 16px;
+        width: 16px;
+    }
+    
     .attached {
         &:first-child {
             padding-right: 2px;

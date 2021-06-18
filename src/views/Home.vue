@@ -1,5 +1,15 @@
 <template>
   <v-container fluid class="grey lighten-5">
+    <v-row>
+      <v-col>
+        <h1>{{ homePageTitle | capitalize }}</h1>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <SearchBar/>
+      </v-col>
+    </v-row>
     <v-row v-for="cardTitle in cardTitles" :key="cardTitle">
       <v-col>
         <PreviewHomePage :titlePreviewBloc="cardTitle.title" :cardInformationArray="cards"/>
@@ -9,15 +19,18 @@
 </template>
 
 <script>
+import SearchBar from '@/components/SearchBar.vue';
 import PreviewHomePage from '@/components/PreviewHomePage.vue';
 
 export default {
   name: 'Home',
   components: {
+    SearchBar,
     PreviewHomePage
   },
   data () {
     return {
+      homePageTitle: 'Epic Road Trip',
       cardTitles: [
         { title: 'Enjoy your life' },
         { title: 'Sleep like a dog' },
@@ -31,6 +44,13 @@ export default {
         { title: 'Best air', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
         { title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' }
       ],
+    }
+  },
+  filters: {
+    capitalize: function (value) {
+      if (!value) return '';
+      value = value.toString();
+      return value.toUpperCase();
     }
   }
 }

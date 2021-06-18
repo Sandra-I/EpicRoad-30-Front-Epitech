@@ -1,9 +1,9 @@
 <template>
     <div class="searchBar gutter">
         <v-row justify="space-between"  align="center">
-            <v-col class="desktop" cols="12" xs="12" sm="12" md="11" lg="11">
+            <v-col class="desktop" cols="12" xs="12" sm="12" md="12" lg="12">
                 <v-row justify="center" align="center">
-                    <v-col cols="5" xs="5" sm="5" md="4" lg="5">
+                    <v-col cols="5" xs="5" sm="5" md="4" lg="4">
                         <v-text-field
                             class="input"
                             solo
@@ -115,6 +115,15 @@
                             label="Budget"
                             hide-details="auto"
                         ></v-text-field>
+                    </v-col>
+                    <v-col cols="1" xs="1" sm="1" md="1" lg="1">
+                        <v-btn icon color="secondary">
+                            <img
+                                class="plus-btn"
+                                alt="add another location to your trip"
+                                src="../assets/plus.svg"
+                            />
+                        </v-btn>
                     </v-col>
                     <v-col cols="1" xs="1" sm="1" md="1" lg="1">
                         <v-btn fab depressed color="secondary" class="search-btn">

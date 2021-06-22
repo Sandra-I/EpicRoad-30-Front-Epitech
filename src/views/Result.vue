@@ -2,6 +2,7 @@
     <div>
         <div class="section">
             <h2>Location on your trip</h2>
+            <img class="favorite" :src="favoriteIcon">
             <LocationRoute />
         </div>
         <div class="section">
@@ -12,10 +13,10 @@
             <div class="selection">
                 <div class="item">
                     <div class="square">
-                        <img alt="monitor resort" src="../assets/monitor.png" />
+                        <img alt="molitor resort" src="../assets/molitor.png" />
                     </div>
                     <div class="details">
-                        <label class="place">Monitor Resort</label>
+                        <label class="place">Molitor Resort</label>
                         <span class="price">526 €</span>
                     </div>
                 </div>
@@ -101,6 +102,7 @@ export default {
         GoogleMap
     },
     data: () => ({
+        favoriteIcon: require('../assets/heart.svg'),
         accomodations: [
             {
                 img: "accomodation1.png",
@@ -111,8 +113,8 @@ export default {
                 total: "Total : 276 €",
             },
             {
-                img: "monitor.png",
-                name: "Monitor Resort",
+                img: "molitor.png",
+                name: "Molitor Resort",
                 address: "42 Avenue George V, 75008 Paris",
                 equipment: "1 room for 2 persons with king size bed",
                 price_detail: "2 x 263 € / night",
@@ -139,7 +141,7 @@ export default {
             },
             {
                 img: "restaurant2.png",
-                name: "Monitor Resort",
+                name: "Molitor Resort",
                 address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris",
                 equipment:
                     "High-end French specialties served in the select decor of a large industrial warehouse.",
@@ -191,8 +193,16 @@ a {
 .section {
     text-align: left;
     margin-bottom: 100px;
+    position: relative;
     h2 {
         margin-bottom: 50px;
+    }
+    .favorite {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        right: 0;
+        top: 10px;
     }
 }
 
@@ -201,7 +211,7 @@ a {
     justify-content: space-between;
     width: 100%;
     .item {
-        width: 25%;
+        width: 20%;
         &:hover {
             opacity: 0.6;
             cursor: pointer;
@@ -270,7 +280,6 @@ a {
         }
         .result-preview {
             &:hover {
-                opacity: 0.6;
                 cursor: pointer;
             }
         }

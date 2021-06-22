@@ -4,6 +4,7 @@
             <img alt="accomodation 1" :src="image" />
         </div>
         <div class="details">
+            <img class="favorite" :src="favoriteIcon">
             <label>{{ result.name }}</label>
             <span>{{ result.address }}</span>
             <span>{{ result.equipment }}</span>
@@ -20,7 +21,8 @@ export default {
     name: "ResultPreview",
     props: ["result"],
     data: (vm) => ({
-        image: require('../assets/'+vm.result.img)
+        image: require('../assets/'+vm.result.img),
+        favoriteIcon: require('../assets/heart.svg')
     })
 };
 </script>
@@ -59,9 +61,16 @@ export default {
         padding: 10px 0 10px 5%;
         justify-content: space-between;
         width: 75%;
+        position: relative;
         label {
             font-weight: bold;
             font-size: 1.2rem;
+        }
+        .favorite {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 0;
         }
         .price {
             display: flex;

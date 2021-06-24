@@ -20,6 +20,17 @@
 
                     <!-- <v-btn depressed large color="primary" class="desktop" @click="openLoginModal(true)">Login</v-btn> -->
                     
+                    <v-alert
+                        v-model="alert"
+                        border="left"
+                        color="green"
+                        dense
+                        icon="mdi-Account"
+                        outlined
+                        text
+                        type="success"
+                    >Connexion réussie !</v-alert>
+
                     <v-dialog
                         transition="dialog-bottom-transition"
                         v-model="showLoginDialog"
@@ -37,51 +48,64 @@
                             </v-btn>
                         </template>
                         <v-card>
-                            <v-card-title class="text-h5 grey lighten-2">
-                                Log in
-                            </v-card-title>
-                    
-                            <v-card-text>
-                                <v-container>
-                                    <v-row>
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                label="Email*"
-                                                required
-                                            ></v-text-field>
-                                        </v-col>
-                                        <!-- TO DO: ajouter validator password + update hint -->
-                                        <v-col cols="12">
-                                            <v-text-field
-                                                label="Password*"
-                                                type="password"
-                                                hint="Password must contains ... "
-                                                required
-                                            ></v-text-field>
-                                        </v-col>
-                                    </v-row>
-                                </v-container>
-                                <small>*fields required</small>
-                            </v-card-text>
-                    
-                            <v-divider></v-divider>
-                    
-                            <v-card-actions>
-                                <v-btn
-                                    color="primary"
-                                    @click="openAndCloseModal"
-                                >
-                                No account yet! Sign me in!
-                                </v-btn>
+                            <!-- v-model="valid" -->
+                            <v-form
+                                ref="form"
                                 
-                                <v-spacer></v-spacer>
-                                <v-btn
-                                    color="primary"
-                                    @click="showLoginDialog = false"
-                                >
-                                Log me
-                                </v-btn>
-                            </v-card-actions>
+                                lazy-validation
+                            >
+                                <v-card-title class="text-h5 grey lighten-2">
+                                    Log in
+                                </v-card-title>
+                        
+                                <v-card-text>
+
+                                    <v-container>
+                                        <v-row>
+                                            <!-- TO ADD: rules + model -->
+                                            <v-col cols="12">
+                                                <v-text-field
+                                                    v-model="user.email"
+                                                    label="Email*"
+                                                    required
+                                                ></v-text-field>
+                                            </v-col>
+                                            <!-- TO DO: ajouter validator password + update hint -->
+                                            <v-col cols="12">
+                                                <v-text-field
+                                                    v-model="user.password"
+                                                    label="Password*"
+                                                    type="password"
+                                                    hint="Password must contains ... "
+                                                    required
+                                                ></v-text-field>
+                                            </v-col>
+                                        </v-row>
+                                    </v-container>
+                                    <small>*fields required</small>
+                                </v-card-text>
+                        
+                                <v-divider></v-divider>
+                        
+                                <v-card-actions>
+                                    <v-btn
+                                        color="primary"
+                                        @click="openAndCloseModal"
+                                    >
+                                        No account yet! Sign me in!
+                                    </v-btn>
+                                    
+                                    <v-spacer></v-spacer>
+                                    <!-- TO ADD: disabled bouton si form non valid -->
+                                    <v-btn
+                                        color="primary"
+                                        @click="login"
+                                        
+                                    >
+                                        Log me
+                                    </v-btn>
+                                </v-card-actions>
+                            </v-form>
                         </v-card>
                     </v-dialog>
                     <v-dialog
@@ -163,12 +187,18 @@
 </template>
 
 <script>
+import API from '@/api.js';
 
 export default {
     name: "Navbar",
     data: () => ({
 		showLoginDialog: false,
-        showSignupDialog: false
+        showSignupDialog: false,
+        alert: false,
+        user: {
+            email: '',
+            password: ''
+        }
     }),
     methods: {
         hideMobileMenu (isHidden) {
@@ -177,6 +207,18 @@ export default {
         openAndCloseModal () {
             this.showSignupDialog = !this.showSignupDialog;
             this.showLoginDialog = !this.showLoginDialog;
+        },
+        login () {
+            API.postLogin({
+                email: this.user.email,
+                password: this.user.password
+            }).then(res => {
+                if (res.status === 200) {
+                    // TO ADD
+                    // this.alert = true
+                    this.showLoginDialog = false
+                }
+            })
         }
     }
 };

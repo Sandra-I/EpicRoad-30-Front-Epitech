@@ -1,121 +1,182 @@
 <template>
-    <!-- <div class="navbar gutter"> -->
-        <v-app-bar class="navbar gutter">
-            <v-row justify="space-between"  align="center">
-                <v-col cols="1" xs="1" sm="1" md="1" lg="1">
-                    <img
-                        class="logo"
-                        alt="epic road trip logo"
-                        src="../assets/worldwide.svg"
-                    />
-                </v-col>
-            
-                <v-col cols="3" xs="3" sm="3" md="2" lg="2" class="user-section">
-                    <v-row align="center" justify="end">
-                        <v-btn icon large>
-                            <img src="../assets/heart.svg" />
-                        </v-btn>
-                        <v-btn icon large class="mobile" @click="hideMobileMenu(false)">
-                            <img src="../assets/menu.svg" />
-                        </v-btn>
-                        <v-dialog
-                            transition="dialog-bottom-transition"
-                            v-model="showDialog"
-                            width="700"
-                        >
-                            <template v-slot:activator="{ on, attrs }">
+    <v-app-bar class="navbar gutter">
+        <v-row justify="space-between"  align="center">
+            <v-col cols="1" xs="1" sm="1" md="1" lg="1">
+                <img
+                    class="logo"
+                    alt="epic road trip logo"
+                    src="../assets/worldwide.svg"
+                />
+            </v-col>
+        
+            <v-col cols="3" xs="3" sm="3" md="2" lg="2" class="user-section">
+                <v-row align="center" justify="end">
+                    <v-btn icon large>
+                        <img src="../assets/heart.svg" />
+                    </v-btn>
+                    <v-btn icon large class="mobile" @click="hideMobileMenu(false)">
+                        <img src="../assets/menu.svg" />
+                    </v-btn>
+
+                    <!-- <v-btn depressed large color="primary" class="desktop" @click="openLoginModal(true)">Login</v-btn> -->
+                    
+                    <v-dialog
+                        transition="dialog-bottom-transition"
+                        v-model="showLoginDialog"
+                        width="700"
+                    >
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                                depressed
+                                large
+                                color="primary"
+                                v-bind="attrs"
+                                v-on="on"
+                            >
+                                Login
+                            </v-btn>
+                        </template>
+                        <v-card>
+                            <v-card-title class="text-h5 grey lighten-2">
+                                Log in
+                            </v-card-title>
+                    
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                label="Email*"
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                        <!-- TO DO: ajouter validator password + update hint -->
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                label="Password*"
+                                                type="password"
+                                                hint="Password must contains ... "
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                                <small>*fields required</small>
+                            </v-card-text>
+                    
+                            <v-divider></v-divider>
+                    
+                            <v-card-actions>
                                 <v-btn
-                                    depressed
-                                    large
                                     color="primary"
-                                    v-bind="attrs"
-                                    v-on="on"
+                                    @click="openAndCloseModal"
                                 >
-                                    Login
+                                No account yet! Sign me in!
                                 </v-btn>
-                            </template>
-                            <v-card>
-                                <v-card-title class="text-h5 grey lighten-2">
-                                    Log in or sign up
-                                </v-card-title>
-                        
-                                <v-card-text>
-									<v-container>
-										<v-row>
-											<v-col
-												cols="12"
-												sm="6"
-												md="4"
-											>
-												<v-text-field
-													label="First name*"
-													required
-												></v-text-field>
-											</v-col>
-											<v-col
-												cols="12"
-												sm="6"
-												md="4"
-											>
-												<v-text-field
-													label="Last name*"
-													required
-												></v-text-field>
-											</v-col>
-											<v-col cols="12">
-												<v-text-field
-													label="Email*"
-													required
-												></v-text-field>
-											</v-col>
-											<!-- TO DO: ajouter validator password + update hint -->
-											<v-col cols="12">
-												<v-text-field
-													label="Password*"
-													type="password"
-													hint="Password must contains ... "
-													required
-												></v-text-field>
-											</v-col>
-										</v-row>
-									</v-container>
-									<small>*fields required</small>
-                                </v-card-text>
-                        
-                                <v-divider></v-divider>
-                        
-                                <v-card-actions>
-                                    <v-btn
-										color="primary"
-                                    >
-                                    No account yet! Sign me in!
-                                    </v-btn>
-									<v-spacer></v-spacer>
-                                    <v-btn
-										color="primary"
-										@click="showDialog = false"
-                                    >
-                                    Log me
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </v-row>
-                </v-col>
-            </v-row> 
-        </v-app-bar>
-    <!-- </div> -->
+                                
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="primary"
+                                    @click="showLoginDialog = false"
+                                >
+                                Log me
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog
+                        transition="dialog-bottom-transition"
+                        v-model="showSignupDialog"
+                        width="700"
+                    >
+                        <v-card>
+                            <v-card-title class="text-h5 grey lighten-2">
+                                Sign up
+                            </v-card-title>
+                    
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-text-field
+                                                label="First name*"
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col
+                                            cols="12"
+                                            sm="6"
+                                            md="4"
+                                        >
+                                            <v-text-field
+                                                label="Last name*"
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                label="Email*"
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                        <!-- TO DO: ajouter validator password + update hint -->
+                                        <v-col cols="12">
+                                            <v-text-field
+                                                label="Password*"
+                                                type="password"
+                                                hint="Password must contains ... "
+                                                required
+                                            ></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                                <small>*fields required</small>
+                            </v-card-text>
+                    
+                            <v-divider></v-divider>
+                    
+                            <v-card-actions>
+                                <v-btn
+                                    color="primary"
+                                    @click="openAndCloseModal"
+                                >
+                                Already in! Log in!
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    color="primary"
+                                    @click="openSignupDialog = false"
+                                >
+                                Log me
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-row>
+            </v-col>
+        </v-row> 
+    </v-app-bar>
 </template>
 
 <script>
+
 export default {
     name: "Navbar",
     data: () => ({
-		showDialog: true
+		showLoginDialog: false,
+        showSignupDialog: false
     }),
     methods: {
         hideMobileMenu (isHidden) {
             return this.$emit("onHiddenMobileMenu", isHidden);
+        },
+        openAndCloseModal () {
+            this.showSignupDialog = !this.showSignupDialog;
+            this.showLoginDialog = !this.showLoginDialog;
         }
     }
 };

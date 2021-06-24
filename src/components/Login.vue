@@ -1,37 +1,18 @@
 <template>
     <v-dialog
         transition="dialog-bottom-transition"
-        v-model="openSignupDialog"
         width="700"
+        v-model="openLoginDialog"
+        @onOpenLoginModal="openLoginDialog = true"
     >
         <v-card>
             <v-card-title class="text-h5 grey lighten-2">
-                Sign up
+                Login
             </v-card-title>
     
             <v-card-text>
                 <v-container>
                     <v-row>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                        >
-                            <v-text-field
-                                label="First name*"
-                                required
-                            ></v-text-field>
-                        </v-col>
-                        <v-col
-                            cols="12"
-                            sm="6"
-                            md="4"
-                        >
-                            <v-text-field
-                                label="Last name*"
-                                required
-                            ></v-text-field>
-                        </v-col>
                         <v-col cols="12">
                             <v-text-field
                                 label="Email*"
@@ -55,15 +36,15 @@
             <v-divider></v-divider>
     
             <v-card-actions>
-                <!-- <v-btn
-                    color="primary"
-                >
-                No account yet! Sign me in!
-                </v-btn> -->
-                <v-spacer></v-spacer>
                 <v-btn
                     color="primary"
                     @click="openSignupDialog = false"
+                >
+                No account yet! Sign me in!
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="primary"
                 >
                 Log me
                 </v-btn>
@@ -74,18 +55,23 @@
 
 <script>
 export default {
-    name: "Signup",
+    name: "Login",
     data: () => ({
-
+        openLoginDialog: false,
+        openSignupDialog: false
     }),
     methods: {
-
-    },
-    props: {
-        openSignupDialog: {
-            type: Boolean,
-            default: false
+        openTest () {
+            this.openLoginDialog = true;
+            console.log("onLogin modal")
+            // return this.showModal = val;
         }
-    }
+    },
+    // props: {
+    //     openLoginDialog: {
+    //         type: Boolean,
+    //         default: false
+    //     }
+    // }
 }
 </script>

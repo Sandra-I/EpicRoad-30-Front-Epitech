@@ -10,7 +10,7 @@
         <SearchBar/>
       </v-col>
     </v-row>
-    <v-row v-for="cardTitle in cardTitles" :key="cardTitle">
+    <v-row v-for="(cardTitle, index) in cardTitles" :key="index">
       <v-col>
         <PreviewHomePage :titlePreviewBloc="cardTitle.title" :cardInformationArray="cards"/>
       </v-col>

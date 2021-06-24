@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="result">
         <div class="section">
             <h2>Location on your trip</h2>
             <img class="favorite" :src="favoriteIcon">
@@ -185,114 +185,116 @@ export default {
 </script>
 
 <style lang="scss">
-a {
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.section {
-    text-align: left;
-    margin-bottom: 100px;
-    position: relative;
-    h2 {
-        margin-bottom: 50px;
+.result {    
+    a {
+        text-decoration: none;
+        font-weight: bold;
     }
-    .favorite {
-        width: 20px;
-        height: 20px;
-        position: absolute;
-        right: 0;
-        top: 10px;
-    }
-}
 
-.selection {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    .item {
-        width: 20%;
-        &:hover {
-            opacity: 0.6;
-            cursor: pointer;
+    .section {
+        text-align: left;
+        margin-bottom: 100px;
+        position: relative;
+        h2 {
+            margin-bottom: 40px;
         }
-        .square {
-            position: relative;
-            display: block;
-            margin: auto;
-            &::before {
-                content: "";
-                padding-top: 100%;
+        .favorite {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 0;
+            top: 10px;
+        }
+    }
+
+    .selection {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        .item {
+            width: 20%;
+            &:hover {
+                opacity: 0.6;
+                cursor: pointer;
+            }
+            .square {
+                position: relative;
                 display: block;
-            }
-            img {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                top: 0;
-                left: 0;
-                bottom: 0;
                 margin: auto;
-                border-radius: 5%;
-            }
-        }
-        .details {
-            display: flex;
-            padding-top: 20px;
-            justify-content: space-between;
-            .place {
-                font-weight: bold;
-                text-transform: uppercase;
-            }
-        }
-    }
-}
-
-.results {
-    width: 50%;
-    padding-right: 50px;
-    .result {
-        &:not(:first-child) {
-            margin-top: 100px;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 50px;
-            h3 {
-                text-align: left;
-                font-size: 24px;
-            }
-            .filter {
-                display: flex;
-                text-transform: none;
-                color: #6e6e6e;
-                letter-spacing: 0;
-                font-size: 16px;
+                &::before {
+                    content: "";
+                    padding-top: 100%;
+                    display: block;
+                }
                 img {
-                    margin-left: 15px;
-                    width: 15px;
-                    height: 15px;
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    margin: auto;
+                    border-radius: 5%;
+                }
+            }
+            .details {
+                display: flex;
+                padding-top: 20px;
+                justify-content: space-between;
+                .place {
+                    font-weight: bold;
+                    text-transform: uppercase;
                 }
             }
         }
-        .result-preview {
-            &:hover {
-                cursor: pointer;
+    }
+
+    .results {
+        width: 50%;
+        padding-right: 50px;
+        .result {
+            &:not(:first-child) {
+                margin-top: 100px;
+            }
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 50px;
+                h3 {
+                    text-align: left;
+                    font-size: 24px;
+                }
+                .filter {
+                    display: flex;
+                    text-transform: none;
+                    color: #6e6e6e;
+                    letter-spacing: 0;
+                    font-size: 16px;
+                    img {
+                        margin-left: 15px;
+                        width: 15px;
+                        height: 15px;
+                    }
+                }
+            }
+            .result-preview {
+                &:hover {
+                    cursor: pointer;
+                }
             }
         }
     }
-}
 
-.map {
-    padding-left: 50px;
-    width: calc(50% + 10vw);
-    margin-right: -10vw;
-    margin-bottom: -250px;
-    .vue-map {
-        border-radius: 20px 0 0 0;
+    .map {
+        padding-left: 50px;
+        width: calc(50% + 10vw);
+        margin-right: -10vw;
+        margin-bottom: -250px;
+        .vue-map {
+            border-radius: 20px 0 0 0;
+        }
     }
 }
 </style>

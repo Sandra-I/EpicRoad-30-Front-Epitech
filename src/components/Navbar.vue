@@ -127,6 +127,7 @@
                                             md="4"
                                         >
                                             <v-text-field
+                                                v-model="user.firstname"
                                                 label="First name*"
                                                 required
                                             ></v-text-field>
@@ -137,12 +138,14 @@
                                             md="4"
                                         >
                                             <v-text-field
+                                                v-model="user.lastname"
                                                 label="Last name*"
                                                 required
                                             ></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                             <v-text-field
+                                                v-model="user.email"
                                                 label="Email*"
                                                 required
                                             ></v-text-field>
@@ -150,6 +153,7 @@
                                         <!-- TO DO: ajouter validator password + update hint -->
                                         <v-col cols="12">
                                             <v-text-field
+                                                v-model="user.password"
                                                 label="Password*"
                                                 type="password"
                                                 hint="Password must contains ... "
@@ -173,9 +177,9 @@
                                 <v-spacer></v-spacer>
                                 <v-btn
                                     color="primary"
-                                    @click="openSignupDialog = false"
+                                    @click="signup"
                                 >
-                                Log me
+                                Sign me
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
@@ -195,10 +199,7 @@ export default {
 		showLoginDialog: false,
         showSignupDialog: false,
         alert: false,
-        user: {
-            email: '',
-            password: ''
-        }
+        user: {}
     }),
     methods: {
         hideMobileMenu (isHidden) {
@@ -216,7 +217,23 @@ export default {
                 if (res.status === 200) {
                     // TO ADD
                     // this.alert = true
+                    alert('Connexion Okay')
                     this.showLoginDialog = false
+                }
+            })
+        },
+        signup () {
+            API.postSignup({
+                firstname: this.user.firstname,
+                lastname: this.user.lastname,
+                email: this.user.email,
+                password: this.user.password
+            }).then(res => {
+                if (res.status === 200) {
+                    // TO ADD
+                    // this.alert = true
+                    alert('Inscription Okay')
+                    this.showSignupDialog = false
                 }
             })
         }

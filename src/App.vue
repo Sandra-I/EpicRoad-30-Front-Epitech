@@ -39,12 +39,17 @@ export default {
     font-family: Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
     color: #2c3e50;
     min-height: 100vh;
 
     h2 {
         text-align: left;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        width: 100%;
+        margin-bottom: 40px;
     }
 
     .content {

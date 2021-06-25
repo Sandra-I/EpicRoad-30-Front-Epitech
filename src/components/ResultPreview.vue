@@ -4,12 +4,13 @@
             <img alt="accomodation 1" :src="image" />
         </div>
         <div class="details">
+            <img class="favorite-icon" :src="favoriteIcon">
             <label>{{ result.name }}</label>
             <span>{{ result.address }}</span>
             <span>{{ result.equipment }}</span>
             <div class="price">
                 <span v-if="result.price_detail">{{ result.price_detail }}</span>
-                <span class="total">{{ result.total }}</span>
+                <span class="total" v-if="result.total">Total : {{ result.total }} €</span>
             </div>
         </div>
     </div>
@@ -20,7 +21,8 @@ export default {
     name: "ResultPreview",
     props: ["result"],
     data: (vm) => ({
-        image: require('../assets/'+vm.result.img)
+        image: require('../assets/'+vm.result.img),
+        favoriteIcon: require('../assets/heart.svg')
     })
 };
 </script>
@@ -59,9 +61,17 @@ export default {
         padding: 10px 0 10px 5%;
         justify-content: space-between;
         width: 75%;
+        position: relative;
         label {
             font-weight: bold;
             font-size: 1.2rem;
+        }
+        .favorite-icon {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 0;
+            cursor: pointer;
         }
         .price {
             display: flex;

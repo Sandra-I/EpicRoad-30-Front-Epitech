@@ -1,7 +1,8 @@
 <template>
-    <div>
+    <div class="result">
         <div class="section">
             <h2>Location on your trip</h2>
+            <img class="favorite" :src="favoriteIcon">
             <LocationRoute />
         </div>
         <div class="section">
@@ -12,10 +13,10 @@
             <div class="selection">
                 <div class="item">
                     <div class="square">
-                        <img alt="monitor resort" src="../assets/monitor.png" />
+                        <img alt="molitor resort" src="../assets/molitor.png" />
                     </div>
                     <div class="details">
-                        <label class="place">Monitor Resort</label>
+                        <label class="place">Molitor Resort</label>
                         <span class="price">526 €</span>
                     </div>
                 </div>
@@ -101,6 +102,7 @@ export default {
         GoogleMap
     },
     data: () => ({
+        favoriteIcon: require('../assets/heart.svg'),
         accomodations: [
             {
                 img: "accomodation1.png",
@@ -108,15 +110,15 @@ export default {
                 address: "15 Bis Rue de Marignan, 75008 Paris",
                 equipment: "1 room for 2 persons with queen size bed",
                 price_detail: "2 x 163 € / night",
-                total: "Total : 276 €",
+                total: "276",
             },
             {
-                img: "monitor.png",
-                name: "Monitor Resort",
+                img: "molitor.png",
+                name: "Molitor Resort",
                 address: "42 Avenue George V, 75008 Paris",
                 equipment: "1 room for 2 persons with king size bed",
                 price_detail: "2 x 263 € / night",
-                total: "Total : 526 €",
+                total: "526",
             },
             {
                 img: "accomodation2.png",
@@ -124,7 +126,7 @@ export default {
                 address: "15 Place Vendôme, 75001 Paris",
                 equipment: "1 room for 2 persons with double king size bed",
                 price_detail: "2 x 413 € / night",
-                total: "Total : 826 €",
+                total: "826",
             },
         ],
         restaurants: [
@@ -139,7 +141,7 @@ export default {
             },
             {
                 img: "restaurant2.png",
-                name: "Monitor Resort",
+                name: "Molitor Resort",
                 address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris",
                 equipment:
                     "High-end French specialties served in the select decor of a large industrial warehouse.",
@@ -183,107 +185,116 @@ export default {
 </script>
 
 <style lang="scss">
-a {
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.section {
-    text-align: left;
-    margin-bottom: 100px;
-    h2 {
-        margin-bottom: 50px;
+.result {    
+    a {
+        text-decoration: none;
+        font-weight: bold;
     }
-}
 
-.selection {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    .item {
-        width: 25%;
-        &:hover {
-            opacity: 0.6;
-            cursor: pointer;
+    .section {
+        text-align: left;
+        margin-bottom: 100px;
+        position: relative;
+        h2 {
+            margin-bottom: 40px;
         }
-        .square {
-            position: relative;
-            display: block;
-            margin: auto;
-            &::before {
-                content: "";
-                padding-top: 100%;
-                display: block;
-            }
-            img {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                margin: auto;
-                border-radius: 5%;
-            }
-        }
-        .details {
-            display: flex;
-            padding-top: 20px;
-            justify-content: space-between;
-            .place {
-                font-weight: bold;
-                text-transform: uppercase;
-            }
+        .favorite {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 0;
+            top: 10px;
         }
     }
-}
 
-.results {
-    width: 50%;
-    padding-right: 50px;
-    .result {
-        &:not(:first-child) {
-            margin-top: 100px;
-        }
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 50px;
-            h3 {
-                text-align: left;
-                font-size: 24px;
-            }
-            .filter {
-                display: flex;
-                text-transform: none;
-                color: #6e6e6e;
-                letter-spacing: 0;
-                font-size: 16px;
-                img {
-                    margin-left: 15px;
-                    width: 15px;
-                    height: 15px;
-                }
-            }
-        }
-        .result-preview {
+    .selection {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        .item {
+            width: 20%;
             &:hover {
                 opacity: 0.6;
                 cursor: pointer;
             }
+            .square {
+                position: relative;
+                display: block;
+                margin: auto;
+                &::before {
+                    content: "";
+                    padding-top: 100%;
+                    display: block;
+                }
+                img {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    margin: auto;
+                    border-radius: 5%;
+                }
+            }
+            .details {
+                display: flex;
+                padding-top: 20px;
+                justify-content: space-between;
+                .place {
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+            }
         }
     }
-}
 
-.map {
-    padding-left: 50px;
-    width: calc(50% + 10vw);
-    margin-right: -10vw;
-    margin-bottom: -250px;
-    .vue-map {
-        border-radius: 20px 0 0 0;
+    .results {
+        width: 50%;
+        padding-right: 50px;
+        .result {
+            &:not(:first-child) {
+                margin-top: 100px;
+            }
+            .header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 50px;
+                h3 {
+                    text-align: left;
+                    font-size: 24px;
+                }
+                .filter {
+                    display: flex;
+                    text-transform: none;
+                    color: #6e6e6e;
+                    letter-spacing: 0;
+                    font-size: 16px;
+                    img {
+                        margin-left: 15px;
+                        width: 15px;
+                        height: 15px;
+                    }
+                }
+            }
+            .result-preview {
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+        }
+    }
+
+    .map {
+        padding-left: 50px;
+        width: calc(50% + 10vw);
+        margin-right: -10vw;
+        margin-bottom: -250px;
+        .vue-map {
+            border-radius: 20px 0 0 0;
+        }
     }
 }
 </style>

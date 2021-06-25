@@ -110,7 +110,7 @@ export default {
                 address: "15 Bis Rue de Marignan, 75008 Paris",
                 equipment: "1 room for 2 persons with queen size bed",
                 price_detail: "2 x 163 € / night",
-                total: "Total : 276 €",
+                total: "276",
             },
             {
                 img: "molitor.png",
@@ -118,7 +118,7 @@ export default {
                 address: "42 Avenue George V, 75008 Paris",
                 equipment: "1 room for 2 persons with king size bed",
                 price_detail: "2 x 263 € / night",
-                total: "Total : 526 €",
+                total: "526",
             },
             {
                 img: "accomodation2.png",
@@ -126,7 +126,7 @@ export default {
                 address: "15 Place Vendôme, 75001 Paris",
                 equipment: "1 room for 2 persons with double king size bed",
                 price_detail: "2 x 413 € / night",
-                total: "Total : 826 €",
+                total: "826",
             },
         ],
         restaurants: [

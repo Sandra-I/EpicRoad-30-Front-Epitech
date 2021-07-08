@@ -6,6 +6,7 @@
                     class="logo"
                     alt="epic road trip logo"
                     src="../assets/worldwide.svg"
+                    @click="$router.push('/')"
                 />
             </v-col>
         
@@ -260,6 +261,7 @@ export default {
     .logo {
         width: 40px;
         height: 40px;
+        cursor: pointer;
     }
 
     .user-section {

@@ -1,16 +1,17 @@
 <template>
-    <div class="result-preview">
+    <div class="result-preview" @click="getDetailRoute()">
         <div class="square">
-            <img alt="accomodation 1" :src="image" />
+            <img v-if="!result.img" alt="accomodation 1" :src="img_placeholder" />
+            <img v-if="result.img" alt="accomodation 1" :src="result.img" />
         </div>
         <div class="details">
             <img class="favorite-icon" :src="favoriteIcon">
-            <label>{{ result.name }}</label>
-            <span>{{ result.address }}</span>
-            <span>{{ result.equipment }}</span>
+            <label class="name">{{ result.name }}</label>
+            <span v-if="result.address">{{ result.address }}</span>
+            <span v-if="result.description" class="description">{{ result.description }}</span>
             <div class="price">
                 <span v-if="result.price_detail">{{ result.price_detail }}</span>
-                <span class="total" v-if="result.total">Total : {{ result.total }} €</span>
+                <span v-if="result.total" class="total">Price : Starting at {{ result.total }} €</span>
             </div>
         </div>
     </div>
@@ -19,11 +20,16 @@
 <script>
 export default {
     name: "ResultPreview",
-    props: ["result"],
-    data: (vm) => ({
-        image: require('../assets/'+vm.result.img),
-        favoriteIcon: require('../assets/heart.svg')
-    })
+    props: ["result","route"],
+    data: () => ({
+        favoriteIcon: require('../assets/heart.svg'),
+        img_placeholder: require('../assets/img_placeholder.jpg'),
+    }),
+    methods: {
+        getDetailRoute () {
+            return this.route ? this.$router.push(this.route) : "";
+        }
+    }
 };
 </script>
 
@@ -66,12 +72,23 @@ export default {
             font-weight: bold;
             font-size: 1.2rem;
         }
+        .name {
+            padding-right: 20px;
+            text-transform: uppercase;
+        }
         .favorite-icon {
             width: 20px;
             height: 20px;
             position: absolute;
             right: 0;
             cursor: pointer;
+        }
+        .description {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* number of lines to show */
+            -webkit-box-orient: vertical;
         }
         .price {
             display: flex;

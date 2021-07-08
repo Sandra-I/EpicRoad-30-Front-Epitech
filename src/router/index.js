@@ -19,7 +19,7 @@ const routes = [
     component: Result
   },
   {
-    path: '/detail',
+    path: '/detail/:type/:id',
     name: 'Detail',
     component: Detail
   },

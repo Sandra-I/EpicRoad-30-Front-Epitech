@@ -2,38 +2,29 @@
     <div class="map-container">
         <GmapMap
             :center="center"
-            :zoom="14"
+            :zoom="13"
             :options="{
                 disableDefaultUI: true,
             }"
             style="width: 100%; height: 100%"
         >
             <GmapMarker
-                :key="index"
+                :key="'accomodation'+index"
                 v-for="(m, index) in markers.accomodations"
                 :position="m"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m"
                 :icon="bedIcon"
             />
             <GmapMarker
-                :key="index"
+                :key="'restaurant'+index"
                 v-for="(m, index) in markers.restaurants"
                 :position="m"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m"
-                :icon="activityIcon"
+                :icon="restaurantIcon"
             />
             <GmapMarker
-                :key="index"
+                :key="'ativity'+index"
                 v-for="(m, index) in markers.activities"
                 :position="m"
-                :clickable="true"
-                :draggable="true"
-                @click="center = m"
-                :icon="restaurantIcon"
+                :icon="activityIcon"
             />
         </GmapMap>
     </div>
@@ -46,31 +37,25 @@ import restaurantIcon from "../assets/restaurant-map.png";
 
 export default {
     name: "GoogleMap",
+    props: ["markers"],
     data() {
         return {
             center: { lat: 48.854, lng: 2.347 },
-            markers: {
-                accomodations: [
-                    { lat: 48.8686, lng: 2.3056 },
-                    { lat: 48.8704, lng: 2.2990 },
-                    { lat: 48.8680, lng: 2.3267 },
-                ],
-                restaurants: [
-                    { lat: 48.8421, lng: 2.3198 },
-                    { lat: 48.8716, lng: 2.3126 },
-                    { lat: 48.8609, lng: 2.3523 },
-                ],
-                activities: [
-                    { lat: 48.8598, lng: 2.3386 },
-                    { lat: 48.8519, lng: 2.2822 },
-                    { lat: 48.8556, lng: 2.2964 },
-                ],
-            },
             bedIcon: bedIcon,
             activityIcon: activityIcon,
             restaurantIcon: restaurantIcon
         };
     },
+    watch: {
+        markers: {
+            handler(value) {
+                if (value.restaurants[0] && value.restaurants[0].lat && value.restaurants[0].lng) {
+                    this.center = { lat: value.restaurants[0].lat, lng: value.restaurants[0].lng};
+                }
+            },
+            deep: true
+        }
+    }
 };
 </script>
 

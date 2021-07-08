@@ -5,15 +5,7 @@
                 <v-row justify="center" align="center">
                     <v-col cols="5" xs="5" sm="5" md="4" lg="4">
                         <!-- TO DO: vérifier couleur de clear-icon-->
-                        <v-text-field
-                            class="input"
-                            solo
-                            label="Location"
-                            align="center"
-                            hide-details="auto"
-                            v-model="searchBarInfo.locationName"
-                            clearable
-                        ></v-text-field>
+                        <AddressInput @autocomplete="onUpdateLocation"/>
                     </v-col>
                     <v-col cols="4" xs="4" sm="4" md="5" lg="4">
                         <v-row>
@@ -151,15 +143,21 @@
                 </v-row>
             </v-col>
         </v-row>
+        <div class="errors" v-if="errors">
+            <span v-for="(error, index) in errors" v-bind:key="index">{{ error }}</span>
+        </div>
     </div>
 </template>
 
 <script>
+import AddressInput from "@/components/AddressInput.vue";
+
 export default {
     name: "SearchBar",
+    components: {AddressInput},
     data: () => ({
         searchBarInfo: {
-            locationName: '',
+            location: '',
             dateIn: '',
             dateOut: '',
             budgetAmount: ''
@@ -169,10 +167,11 @@ export default {
         showSliderBudget: false
     }),
     props: {
+        errors: Array,
         showDeleteButton: {
             default: false,
             required: true
-        }
+        },
     },
     computed: {
         formatedDateIn () {
@@ -194,6 +193,17 @@ export default {
         },
         noShowSliderBudget () {
             this.showSliderBudget = false;
+        },
+        onUpdateLocation (value) {
+            this.searchBarInfo.location = value;
+        }
+    },
+    watch: {
+        searchBarInfo: {
+            handler(value) {
+                this.$emit('search-updated', value);
+            },
+            deep: true
         }
     }
 };
@@ -201,11 +211,7 @@ export default {
 
 <style scoped lang="scss">
 .searchBar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     padding: 20px 0;
-
     .search-btn {
         width: 45px !important;
         height: 45px !important;
@@ -233,4 +239,11 @@ export default {
 
 }
 
+.errors {
+    margin-top: 20px;
+    span {
+        display: block;
+        color: red;
+    }
+}
 </style>

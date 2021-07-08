@@ -1,41 +1,18 @@
 <template>
     <div class="route">
         <ul>
-            <li>
-                <label>Grote Markt, 1000 Brussel, Belgique</label>
+            <li v-for="route in routes" v-bind:key="route.id">
+                <label>{{ route.location.formatted_address }}</label>
                 <div class="details">
-                    <span>22 april to 23 april</span>
-                    <span>Budget : 200 - 250 €</span>
-                    <div class="selection">
-                        <img
-                            alt="restaurant logo"
-                            :src="restaurantIcon"
-                        />
-                        <img alt="bicycle logo" :src="this.activityIcon" />
-                        <img alt="bed logo" :src="bedIcon" />
+                    <div>
+                        <span v-if="route.dateIn && route.dateOut">{{ formatDate(route.dateIn) }} to {{ formatDate(route.dateOut) }} </span>
                     </div>
-                </div>
-            </li>
-            <li>
-                <label>Avenue des Champs Elysées, 75008 Paris</label>
-                <div class="details">
-                    <span>23 april to 25 april</span>
-                    <span>Budget : 800 - 900 €</span>
+                    <div>
+                        <span v-if="route.budgetAmount">Budget : {{ route.budgetAmount }} €</span>
+                    </div>
                     <div class="selection">
-                        <img
-                            alt="restaurant logo"
-                            :src="restaurantIcon"
-                        />
+                        <img alt="restaurant logo" :src="restaurantIcon" />
                         <img alt="bicycle logo" :src="activityIcon" />
-                    </div>
-                </div>
-            </li>
-            <li>
-                <label>Monplaisir, 69008 Lyon </label>
-                <div class="details">
-                    <span>25 april to 26 april</span>
-                    <span>Budget : 100 - 150 €</span>
-                    <div class="selection">
                         <img alt="bed logo" :src="bedIcon" />
                     </div>
                 </div>
@@ -46,6 +23,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import bedIcon from "../assets/bed.svg";
 import activityIcon from "../assets/bicycle.svg";
 import restaurantIcon from "../assets/restaurant.svg";
@@ -57,10 +35,19 @@ export default {
     name: "LocationRoute",
     props: ["inMenu"],
     data: (vm) => ({
-            bedIcon: vm.inMenu ? bedIconLight : bedIcon,
-            restaurantIcon: vm.inMenu ? restaurantIconLight : restaurantIcon,
-            activityIcon: vm.inMenu ? activityIconLight : activityIcon,
-        })
+        routes: [],
+        bedIcon: vm.inMenu ? bedIconLight : bedIcon,
+        restaurantIcon: vm.inMenu ? restaurantIconLight : restaurantIcon,
+        activityIcon: vm.inMenu ? activityIconLight : activityIcon,
+    }),
+    created: function () {
+        this.routes = JSON.parse(localStorage.getItem('search'));
+    },
+    methods: {
+        formatDate (date) {
+            return moment(new Date(date)).format("D MMMM")
+        }
+    }
 };
 </script>
 

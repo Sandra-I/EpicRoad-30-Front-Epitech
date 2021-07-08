@@ -15,7 +15,9 @@
                                             v-bind:key="searchBar.id"
                                             v-bind:index="index"
                                             @remove="removeSearchBar(index)"
+                                            @search-updated="data => onUpdateSearch(index, data)"
                                             :showDeleteButton="showDeleteButton(index)"
+                                            :errors="errors[index]"
                                         ></li>
                                     </ul>
                                 </v-col>
@@ -59,15 +61,14 @@ export default {
     components: {
         SearchBar
     },
-    data () {
-        return {
-            valid: false,
-            searchBars: [
-                { id: 1 }
-            ],
-            nextSearchBarId: 2
-        }
-    },
+    data: () => ({
+        valid: false,
+        searchBars: [
+            { id: 1 }
+        ],
+        nextSearchBarId: 2,
+        errors: []
+    }),
     methods: {
         addNewSearchBar () {
             let toInsert
@@ -89,14 +90,31 @@ export default {
             this.$refs.form.reset()
         },
         search () {
-            console.log('this.$refs.form')
-            this.$refs.form.validate()
+            if (this.checkForm()) {
+                localStorage.setItem('search', JSON.stringify(this.searchBars));
+                this.$router.push({ path: '/result' })
+            }
         },
         showDeleteButton (index) {
             if (index === 0) {
                 return false
             }
             return true
+        },
+        onUpdateSearch (index, searchData) {
+            searchData.id = this.searchBars[index].id;
+            this.searchBars[index] = searchData;
+        },
+        checkForm () {
+            var valide = true;
+            this.searchBars.forEach((item, index) => {
+                if (!item.location) {
+                    valide = false;
+                    var errors = this.errors[index] ? this.errors[index].push('Location is required.') : this.errors[index] = ['Location is required.'];
+                    this.$set(this.errors, index, errors)
+                }
+            })
+            return valide;
         }
     }
 }

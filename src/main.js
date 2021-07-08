@@ -8,10 +8,10 @@ Vue.config.productionTip = false
 
 Vue.use(VueGoogleMaps, {
     load: {
-      key: 'AIzaSyBwttAjjMFHK887pcOtFuNFvDz1u-nWrCk'
+        key: "AIzaSyDxdvPap0zAkLNpeDrzsv1NewUgVPe2qvw"
     },
     installComponents: true
-  })
+})
 
 new Vue({
     vuetify,

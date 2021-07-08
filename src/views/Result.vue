@@ -50,23 +50,19 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview :result="accomodations[0]" />
-                    <ResultPreview :result="accomodations[1]" />
-                    <ResultPreview :result="accomodations[2]" />
-                    <a href="">See 42 additional accommodations ...</a>
+                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" />
+                    <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
-                        <h3>Restaurants</h3>
+                        <h3>Bars & Restaurants</h3>
                         <v-btn text class="filter">
                             Filters
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview :result="restaurants[0]" />
-                    <ResultPreview :result="restaurants[1]" />
-                    <ResultPreview :result="restaurants[2]" />
-                    <a href="">See 65 additional restaurants ...</a>
+                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" />
+                    <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
@@ -76,14 +72,12 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview :result="activities[0]" />
-                    <ResultPreview :result="activities[1]" />
-                    <ResultPreview :result="activities[2]" />
-                    <a href="">See 18 additional activities ...</a>
+                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/result/activity/'+activity.id"/>
+                    <a href="">See {{ activities.length - 3 }} additional activities ...</a>
                 </div>
             </div>
             <div class="map">
-                <GoogleMap />
+                <GoogleMap :markers="markers"/>
             </div>
         </div>
     </div>
@@ -92,7 +86,10 @@
 <script>
 import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
-import GoogleMap from '@/components/GoogleMap.vue'
+import GoogleMap from '@/components/GoogleMap.vue';
+import accomodationsApi from "@/api/accomodations";
+import restaurantsApi from "@/api/restaurants";
+import activitiesApi from "@/api/activities";
 
 export default {
     name: "Result",
@@ -103,84 +100,48 @@ export default {
     },
     data: () => ({
         favoriteIcon: require('../assets/heart.svg'),
-        accomodations: [
-            {
-                img: "accomodation1.png",
-                name: "Palaça",
-                address: "15 Bis Rue de Marignan, 75008 Paris",
-                equipment: "1 room for 2 persons with queen size bed",
-                price_detail: "2 x 163 € / night",
-                total: "276",
-            },
-            {
-                img: "molitor.png",
-                name: "Molitor Resort",
-                address: "42 Avenue George V, 75008 Paris",
-                equipment: "1 room for 2 persons with king size bed",
-                price_detail: "2 x 263 € / night",
-                total: "526",
-            },
-            {
-                img: "accomodation2.png",
-                name: "Ritz Paris",
-                address: "15 Place Vendôme, 75001 Paris",
-                equipment: "1 room for 2 persons with double king size bed",
-                price_detail: "2 x 413 € / night",
-                total: "826",
-            },
-        ],
-        restaurants: [
-            {
-                img: "restaurant1.png",
-                name: "Ciel de Paris",
-                address:
-                    "Tour Maine Montparnasse, 56ème, Avenue du Maine, 75015 Paris",
-                equipment:
-                    "Panoramic view from the top of the Montparnasse tower.",
-                total: "Menu starting at 25€",
-            },
-            {
-                img: "restaurant2.png",
-                name: "Molitor Resort",
-                address: "112 Rue du Faubourg Saint-Honoré, 75008 Paris",
-                equipment:
-                    "High-end French specialties served in the select decor of a large industrial warehouse.",
-                total: "Menu starting at 40€",
-            },
-            {
-                img: "accomodation2.png",
-                name: "Le Ruisseau Burger Joint",
-                address: "22 Rue Rambuteau, 75003 Paris",
-                equipment:
-                    "This restaurant with a sober setting serves burgers, fries, beers and desserts in the dining room or on the terrace.",
-                total: "Menu starting at 17 €",
-            },
-        ],
-        activities: [
-            {
-                img: "louvre.png",
-                name: "Louvre Museum",
-                address: "Place du Louvre, 75008 Paris",
-                equipment:
-                    "The Louvre Museum is a museum located in the 1er arrondissement of Paris, France.",
-                total: "Starting at 42 €",
-            },
-            {
-                img: "activity1.png",
-                name: "The Bargees of Paris",
-                address: "Port de Grenelle, 75015 Paris",
-                equipment: "Houseboat travel in Paris.",
-                total: "Starting at 25 €",
-            },
-            {
-                img: "activity2.png",
-                name: "Eiffel Tower",
-                address: "Champs de Mars, 75008 Paris",
-                equipment: "Panoramic view on all Paris.",
-                total: "Starting at 75 €",
-            },
-        ],
+        accomodations: [],
+        restaurants: [],
+        activities: [],
+        markers: {
+            "accomodations": [],
+            "restaurants": [],
+            "activities": []
+        }
     }),
+    mounted () {
+        const search = JSON.parse(localStorage.getItem('search'));
+        accomodationsApi.getAccomodations(search[0].location.lat, search[0].location.lng).then(accomodations => {
+            if (accomodations.length) {
+                this.accomodations = accomodations;
+                // Set Google Map markers
+                this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
+                    "lat": parseFloat(accomodation.lat),
+                    "lng": parseFloat(accomodation.lng)
+                }))
+            }
+        });
+        restaurantsApi.getRestaurants(search[0].location.city).then(restaurants => {
+            if (restaurants.length) {
+                this.restaurants = restaurants;
+                // Set Google Map markers
+                this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
+                    "lat": parseFloat(restaurant.lat),
+                    "lng": parseFloat(restaurant.lng)
+                }))
+            }
+        });
+        activitiesApi.getActivities(search[0].location.lat, search[0].location.lng).then(activities => {
+            if (activities.length) {
+                this.activities = activities;
+                // Set Google Map markers
+                this.markers.activities = this.activities.slice(0, 3).map(activity => ({
+                    "lat": parseFloat(activity.lat),
+                    "lng": parseFloat(activity.lng)
+                }))
+            }
+        });
+    }
 };
 </script>
 
@@ -259,7 +220,6 @@ export default {
             }
             .header {
                 display: flex;
-                align-items: center;
                 justify-content: space-between;
                 margin-bottom: 50px;
                 h3 {

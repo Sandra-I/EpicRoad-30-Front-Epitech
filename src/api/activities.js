@@ -14,8 +14,20 @@ const activities = {
                     }
                     reject();
                 })
+                .catch((error) => {
+                    reject(error);
+                })
+        });
+    },
+
+    getActivityById: (id) => {
+        return new Promise((resolve, reject) => {
+            axios.get(urlApi + "/api/activities/" + id)
                 .then((response) => {
-                    resolve(response.data);
+                    if (response.data) {
+                        resolve(activities.formatToDetail(response.data));
+                    }
+                    reject();
                 })
                 .catch((error) => {
                     reject(error);
@@ -30,6 +42,20 @@ const activities = {
             name: data.name,
             description: data.shortDescription,
             total: parseInt(data.price.amount),
+            lat: data.geoCode.latitude,
+            lng: data.geoCode.longitude
+        }
+    },
+
+    formatToDetail: (data) => {
+        return {
+            id: data.id,
+            img: data.pictures,
+            name: data.name,
+            rating: parseFloat(data.rating).toFixed(2),
+            description: data.shortDescription,
+            total: parseInt(data.price.amount).toFixed(2),
+            website: data.bookingLink,
             lat: data.geoCode.latitude,
             lng: data.geoCode.longitude
         }

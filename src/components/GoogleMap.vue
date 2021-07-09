@@ -2,7 +2,7 @@
     <div class="map-container">
         <GmapMap
             :center="center"
-            :zoom="13"
+            :zoom="12"
             :options="{
                 disableDefaultUI: true,
             }"

@@ -19,6 +19,7 @@
             </li>
         </ul>
         <a class="edit-route" @click="$router.push('/')">Edit this route</a>
+        <a class="edit-route" v-bind:href="googleThisRoute()" target="_blank">Google this route</a>
     </div>
 </template>
 
@@ -46,6 +47,27 @@ export default {
     methods: {
         formatDate (date) {
             return moment(new Date(date)).format("D MMMM")
+        },
+        googleThisRoute () {
+            try {
+                const searchParamsArray = [];
+                let url = `https://www.google.com/maps/dir/`;
+                Object.values(this.routes).map((result) => {
+                    const searchParams = {
+                        street_number: result.location.street_number,
+                        street: result.location.street,
+                        zip_code: result.location.zip_code,
+                        city: result.location.city
+                    }
+                    searchParamsArray.push(Object.values(searchParams))
+                })
+                searchParamsArray.map(result => {
+                    url += `${result}/`
+                })
+                return url;
+            } catch (error) {
+                console.error(error.message)
+            }
         }
     }
 };

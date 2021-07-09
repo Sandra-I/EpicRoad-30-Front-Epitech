@@ -61,7 +61,8 @@ export default {
             axios.delete(`${BASE_URL}/api/auth/logout`)
             .then(res => {
                 if (res.status === 204) {
-                    localStorage.clear();
+                    localStorage.removeItem('jwt');
+                    localStorage.removeItem('user');
                 }
                 resolve({status: "success"})
             }).catch(error => {

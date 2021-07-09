@@ -3,7 +3,7 @@
         <v-col class="mainPhoto" cols="12" xs="12" sm="8" md="8" lg="8">
             <img :src="item.img[0]" />
         </v-col>
-        <v-col class="optPhotos" cols="12" xs="12" sm="4" md="4" lg="4">
+        <v-col v-if="item.img.length > 1" class="optPhotos" cols="12" xs="12" sm="4" md="4" lg="4">
             <img :src="item.img[1]"/>
             <img :src="item.img[2]"/>
             <img :src="item.img[3]"/>

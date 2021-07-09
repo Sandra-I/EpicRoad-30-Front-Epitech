@@ -2,21 +2,26 @@
     <v-row class="main-detail">
         <h2>{{ item.name }}</h2>
         <div class="subsection">
-            <div class="note">
-                <img src="../../assets/star.svg" />
-                <img src="../../assets/star.svg" />
-                <img src="../../assets/star.svg" />
-                <img src="../../assets/star.svg" />
-                <img src="../../assets/star.svg" />
-                <span class="numeric">4.9/5</span>
+            <div v-if="item.rating && parseFloat(item.rating) > 0" class="note">
+                <img v-if="item.rating > 0" src="../../assets/star.svg" />
+                <img v-else src="../../assets/star-empty.svg" />
+                <img v-if="item.rating > 1" src="../../assets/star.svg" />
+                <img v-else src="../../assets/star-empty.svg" />
+                <img v-if="item.rating > 2" src="../../assets/star.svg" />
+                <img v-else src="../../assets/star-empty.svg" />
+                <img v-if="item.rating > 3" src="../../assets/star.svg" />
+                <img v-else src="../../assets/star-empty.svg" />
+                <img v-if="item.rating > 4" src="../../assets/star.svg" />
+                <img v-else src="../../assets/star-empty.svg" />
+                <span class="numeric">{{ item.rating }}</span>
             </div>
-            <span class="price">Average price : {{ item.price }}</span>
+            <span v-if="item.total" class="price">Price : Starting at {{ item.total }} €</span>
         </div>
-        <div class="subsection">
-            <span>13 Rue Nungesser et Coli, 75016 Paris</span>
-            <a :href="item.website">{{ item.website }}</a>
+        <div class="subsection" v-if="item.address || item.website">
+            <span>{{ item.address }}</span>
+            <label>Website : </label><a :href="item.website">{{ item.website }}</a>
         </div>
-        <div class="subsection phone">
+        <div class="subsection phone" v-if="item.phone">
             <img src="../../assets/phone.svg" />
             <span>{{ item.phone }}</span>
         </div>
@@ -44,7 +49,7 @@ export default {
             width: 20px;
             margin-right: 5px;
         }
-        span, a {
+        span {
             display: block;
             margin-bottom: 20px;
             &.phone,

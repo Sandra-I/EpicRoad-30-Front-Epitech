@@ -12,4 +12,9 @@ export default {
     postLogin (params) {
         return axios.post(`${BASEURL}/auth/login`, params)
     },
+
+    // Post Logout
+    postLogout () {
+        return axios.delete(`${BASEURL}/auth/logout`)
+    },
 }

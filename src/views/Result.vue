@@ -6,36 +6,37 @@
             <LocationRoute />
         </div>
         <div class="section">
-            <h2>
-                Everything you want in <strong>Paris</strong> for
-                <strong>885 €</strong>
+            <h2 v-if="search.budgetAmount">
+                Everything you want in <strong>{{ search.location.city }}</strong> for <strong>{{ search.budgetAmount }} €</strong>
+            </h2>
+            <h2 v-else>
+                Everything you want in <strong>{{ search.location.city }}</strong>
             </h2>
             <div class="selection">
-                <div class="item">
+                <div class="item" v-if="accomodations[0]" @click="$router.push('/detail/accomodation/'+accomodations[0].id)">
                     <div class="square">
-                        <img alt="molitor resort" src="../assets/molitor.png" />
+                        <img alt="accomodation-suggestion" :src="accomodations[0].img" />
                     </div>
                     <div class="details">
-                        <label class="place">Molitor Resort</label>
-                        <span class="price">526 €</span>
+                        <label class="place">{{ accomodations[0].name }}</label>
+                        <span class="price">{{ accomodations[0].total }} €</span>
                     </div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="restaurants[0]" @click="$router.push('/detail/'+restaurants[0].type+'/'+restaurants[0].id)">
                     <div class="square">
-                        <img alt="burger nation" src="../assets/burger.png" />
+                        <img alt="restaurant-suggestion" :src="restaurants[0].img" />
                     </div>
                     <div class="details">
-                        <label class="place">Burger Nation</label>
-                        <span class="price">17 €</span>
+                        <label class="place">{{ restaurants[0].name }}</label>
                     </div>
                 </div>
-                <div class="item">
+                <div class="item" v-if="activities[0]" @click="$router.push('/detail/activity/'+activities[0].id)">
                     <div class="square">
-                        <img alt="louvre museum" src="../assets/louvre.png" />
+                        <img alt="activity-suggestion" :src="activities[0].img"/>
                     </div>
                     <div class="details">
-                        <label class="place">Louvre Museum</label>
-                        <span class="price">42 €</span>
+                        <label class="place">{{ activities[0].name }}</label>
+                        <span class="price">{{ activities[0].total }} €</span>
                     </div>
                 </div>
             </div>
@@ -50,7 +51,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" />
+                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id"/>
                     <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                 </div>
                 <div class="result">
@@ -61,7 +62,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" />
+                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id"/>
                     <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                 </div>
                 <div class="result">
@@ -72,7 +73,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/result/activity/'+activity.id"/>
+                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id"/>
                     <a href="">See {{ activities.length - 3 }} additional activities ...</a>
                 </div>
             </div>
@@ -100,6 +101,7 @@ export default {
     },
     data: () => ({
         favoriteIcon: require('../assets/heart.svg'),
+        search: {"location": {}, "budgetAmount": 0},
         accomodations: [],
         restaurants: [],
         activities: [],
@@ -110,8 +112,9 @@ export default {
         }
     }),
     mounted () {
-        const search = JSON.parse(localStorage.getItem('search'));
-        accomodationsApi.getAccomodations(search[0].location.lat, search[0].location.lng).then(accomodations => {
+        const currentSearch = JSON.parse(localStorage.getItem('search'))[0];
+        this.search = currentSearch;
+        accomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
             if (accomodations.length) {
                 this.accomodations = accomodations;
                 // Set Google Map markers
@@ -121,7 +124,7 @@ export default {
                 }))
             }
         });
-        restaurantsApi.getRestaurants(search[0].location.city).then(restaurants => {
+        restaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
             if (restaurants.length) {
                 this.restaurants = restaurants;
                 // Set Google Map markers
@@ -131,7 +134,7 @@ export default {
                 }))
             }
         });
-        activitiesApi.getActivities(search[0].location.lat, search[0].location.lng).then(activities => {
+        activitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
             if (activities.length) {
                 this.activities = activities;
                 // Set Google Map markers
@@ -206,6 +209,7 @@ export default {
                 .place {
                     font-weight: bold;
                     text-transform: uppercase;
+                    max-width: 80%;
                 }
             }
         }

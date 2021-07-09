@@ -1,9 +1,9 @@
 <template>
     <v-app id="app">
         <div v-if="hideMobileMenu">
-            <Navbar @onHiddenMobileMenu="onHiddenMobileMenu"/>
+            <Navbar @onHiddenMobileMenu="onHiddenMobileMenu" :isLoggedIn="isLoggedIn" @logout="logout"/>
             <div class="content gutter">
-                <router-view />
+                <router-view @loggedIn="checkIsLoggedIn"/>
             </div>
             <Footer />
         </div>
@@ -14,17 +14,39 @@
 <script>
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
-import MobileMenu from '@/components/MobileMenu.vue'
+import MobileMenu from '@/components/MobileMenu.vue';
+import API from '@/api.js';
 
 export default {
     data: () => ({
-        hideMobileMenu: true
+        hideMobileMenu: true,
+        isLoggedIn: false
     }),
     components: { Navbar, Footer, MobileMenu },
     methods: {
         onHiddenMobileMenu (hide) {
             this.hideMobileMenu = hide;
+        },
+        checkIsLoggedIn () {
+            if (localStorage.getItem('jwt')) {
+                return this.isLoggedIn = true;
+            }
+        },
+        logout () {
+            API.postLogout({
+            }).then(res => {
+                if (res.status === 204) {
+                    localStorage.clear();
+                    this.isLoggedIn = false;
+                    this.$router.push('/');  
+                }
+            }).catch(error => {
+                this.error = error;
+            });
         }
+    },
+    mounted () {
+        this.checkIsLoggedIn();
     }
 };
 </script>
@@ -60,6 +82,10 @@ export default {
     .gutter {
         padding-left: 10vw;
         padding-right: 10vw;
+    }
+
+    .white {
+        color: #ffffff;
     }
 }
 

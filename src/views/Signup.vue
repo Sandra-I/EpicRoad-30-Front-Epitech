@@ -1,28 +1,18 @@
 <template>
     <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-            Sign up
-        </v-card-title>
+        <v-card-title class="text-h5 grey lighten-2"> Sign up </v-card-title>
 
         <v-card-text>
             <v-container>
                 <v-row>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                         <v-text-field
                             v-model="user.firstname"
                             label="First name*"
                             required
                         ></v-text-field>
                     </v-col>
-                    <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                    >
+                    <v-col cols="12" sm="6" md="4">
                         <v-text-field
                             v-model="user.lastname"
                             label="Last name*"
@@ -54,19 +44,9 @@
         <v-divider></v-divider>
 
         <v-card-actions>
-            <v-btn
-                color="primary"
-                href="/login"
-            >
-            Already in! Log in!
-            </v-btn>
+            <v-btn color="primary" href="/login"> Already in! Log in! </v-btn>
             <v-spacer></v-spacer>
-            <v-btn
-                color="primary"
-                @click="signup"
-            >
-            Sign me
-            </v-btn>
+            <v-btn color="primary" @click="signup"> Sign me </v-btn>
         </v-card-actions>
 
         <v-card-title v-if="error" class="error">
@@ -76,34 +56,33 @@
 </template>
 
 <script>
-import API from '@/api.js';
+import Account from "@/api/account.js";
 
 export default {
     name: "Signup",
     data: () => ({
         user: {},
-        error: ''
+        error: "",
     }),
     methods: {
-        signup () {
-            API.postSignup({
-                firstname: this.user.firstname,
-                lastname: this.user.lastname,
-                email: this.user.email,
-                password: this.user.password
-            }).then(res => {
-                if (res.status === 200) {
-                    this.error = '';
+        signup() {
+            Account.postSignup(
+                this.user.firstname,
+                this.user.lastname,
+                this.user.email,
+                this.user.password
+            )
+                .then(() => {
                     if (this.$route.params.nextUrl != null) {
-                        this.$router.push(this.$route.params.nextUrl)
+                        this.$router.push(this.$route.params.nextUrl);
                     } else {
-                        this.$router.push('/login')
+                        this.$router.push("/login");
                     }
-                }
-            }).catch(error => {
-                this.error = error;
-            });
-        }
-    }
-}
+                })
+                .catch((error) => {
+                    this.error = error.error;
+                });
+        },
+    },
+};
 </script>

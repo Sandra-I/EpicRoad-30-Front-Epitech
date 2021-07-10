@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const urlApi = process.env.VUE_APP_URL_API;
+const BASE_URL = process.env.VUE_APP_URL_API;
 const accomodations = {
 
     getAccomodations: (lat, lng, budget) => {
         return new Promise((resolve, reject) => {
-            var requestUrl = urlApi + "/api/hotels?radius=20&latitude=" + lat + "&longitude=" + lng + (budget ? "&priceRange=0-"+(0.9*budget)+"&currency=EUR" : "");
+            var requestUrl = BASE_URL + "/api/hotels?radius=20&latitude=" + lat + "&longitude=" + lng + (budget ? "&priceRange=0-"+(0.9*budget)+"&currency=EUR" : "");
             axios.get(requestUrl)
                 .then((response) => {
                     if (response.data.length) {
@@ -22,7 +22,7 @@ const accomodations = {
 
     getAccomodationById: (acc_id) => {
         return new Promise((resolve, reject) => {
-            axios.get(urlApi + "/api/hotels/by-hotel?hotelId=" + acc_id)
+            axios.get(BASE_URL + "/api/hotels/by-hotel?hotelId=" + acc_id)
                 .then((response) => {
                     resolve(accomodations.formatToDetail(response.data));
                 })
@@ -41,7 +41,8 @@ const accomodations = {
             address: accomodations.formatAddress(data.hotel.address),
             total: parseInt(data.offers[0].price.total),
             lat: data.hotel.latitude,
-            lng: data.hotel.longitude
+            lng: data.hotel.longitude,
+            type: "accomodation"
         }
     },
 

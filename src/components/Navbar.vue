@@ -13,7 +13,7 @@
             <v-col cols="4" xs="4" sm="4" md="3" lg="3" class="user-section">
                 <v-row align="center" justify="end">
                     <template v-if="isLoggedIn">
-                        <v-btn icon large class="pr-5">
+                        <v-btn icon large class="pr-5" @click="$router.push('favorites')">
                             <img src="../assets/heart.svg" />
                         </v-btn>
                     </template>

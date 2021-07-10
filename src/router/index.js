@@ -36,7 +36,7 @@ const routes = [
 		component: Detail
 	},
 	{
-		path: '/favorite',
+		path: '/favorites',
 		name: 'Favorite',
 		component: Favorite,
 		meta: {

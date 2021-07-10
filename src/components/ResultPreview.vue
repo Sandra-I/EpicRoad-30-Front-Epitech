@@ -5,7 +5,7 @@
             <img v-if="result.img" alt="accomodation 1" :src="result.img" />
         </div>
         <div class="details">
-            <img class="favorite-icon" :src="favoriteIcon">
+            <img class="favorite-icon" :src="icon" @click="manageFavorite(result.type, result.id, $event)">
             <label class="name">{{ result.name }}</label>
             <span v-if="result.address">{{ result.address }}</span>
             <span v-if="result.description" class="description">{{ result.description }}</span>
@@ -18,17 +18,42 @@
 </template>
 
 <script>
+import Favorites from "@/api/favorites"
+
 export default {
     name: "ResultPreview",
-    props: ["result","route"],
+    props: ["result","route","isFavorite"],
     data: () => ({
+        icon: "",
         favoriteIcon: require('../assets/heart.svg'),
+        isFavoriteIcon: require('../assets/heart-full.svg'),
         img_placeholder: require('../assets/img_placeholder.jpg'),
     }),
+    mounted () {
+        this.icon = this.isFavorite ? this.isFavoriteIcon : this.favoriteIcon;
+        console.log(this.isFavorite)
+    },
     methods: {
         getDetailRoute () {
             return this.route ? this.$router.push(this.route) : "";
-        }
+        },
+        manageFavorite (type, id, e) {
+            e.stopPropagation();
+            if (!this.isFavorite) {
+                Favorites.addFavorite(type, id).then(() => {
+                    this.icon = this.isFavoriteIcon;
+                    this.isFavorite = true;
+                });
+            } else {
+                console.log(id)
+                Favorites.removeFavorite(id).then(() => {
+                    this.icon = this.favoriteIcon;
+                    this.isFavorite = false;
+                });
+                this.icon = this.favoriteIcon;
+                this.$emit("remove");
+            }
+        },
     }
 };
 </script>

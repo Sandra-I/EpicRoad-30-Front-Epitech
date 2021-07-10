@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const urlApi = process.env.VUE_APP_URL_API;
+const BASE_URL = process.env.VUE_APP_URL_API;
 const restaurants = {
 
     getRestaurants: (city = false) => {
@@ -24,7 +24,7 @@ const restaurants = {
 
     getEats: (city = false) => {
         return new Promise((resolve, reject) => {
-            var requestUrl = urlApi + "/api/eats" + (city ? "?near=" + city.toLowerCase() : "");
+            var requestUrl = BASE_URL + "/api/eats" + (city ? "?near=" + city.toLowerCase() : "");
             axios.get(requestUrl)
                 .then((response) => {
                     if (response.data.length) {
@@ -41,13 +41,13 @@ const restaurants = {
 
     getEatById: (id) => {
         return new Promise((resolve, reject) => {
-            axios.get(urlApi+"/api/eats/"+id)
+            axios.get(BASE_URL+"/api/eats/"+id)
                 .then((response) => {
-                    if (response.data.length) {
-                        const data = response.data.map(eat => restaurants.formatToDetail(eat));
+                    if (response.data) {
+                        var data = restaurants.formatToDetail(response.data, BASE_URL+"/api/eats/"+id+"/thumbnails");
                         resolve(data);
                     }
-                    reject();
+                    reject("Empty data");
                 })
                 .catch((error) => {
                     reject(error);
@@ -57,10 +57,10 @@ const restaurants = {
 
     getDrinks: (city = false) => {
         return new Promise((resolve, reject) => {
-            var requestUrl = urlApi + "/api/drinks" + (city ? "?near=" + city.toLowerCase() : "");
+            var requestUrl = BASE_URL + "/api/drinks" + (city ? "?near=" + city.toLowerCase() : "");
             axios.get(requestUrl)
                 .then((response) => {
-                    if (response.data.length) {
+                    if (response.data) {
                         const data = response.data.map(drink => restaurants.formatToResult(drink, "drink"));
                         resolve(data);
                     }
@@ -74,13 +74,13 @@ const restaurants = {
 
     getDrinkById: (id) => {
         return new Promise((resolve, reject) => {
-            axios.get(urlApi+"/api/drinks/"+id)
+            axios.get(BASE_URL+"/api/drinks/"+id)
                 .then((response) => {
-                    if (response.data.length) {
-                        const data = response.data.map(drink => restaurants.formatToDetail(drink));
+                    if (response.data) {
+                        var data = restaurants.formatToDetail(response.data, BASE_URL+"/api/drinks/"+id+"/thumbnails");
                         resolve(data);
                     }
-                    reject();
+                    reject("Empty data");
                 })
                 .catch((error) => {
                     reject(error);
@@ -100,15 +100,20 @@ const restaurants = {
         }
     },
 
-    formatToDetail: (data) => {
-        console.log(data);
+    formatToDetail: (data, img) => {
         return {
             id: data.id,
             name: data.name,
             address: restaurants.getAddress(data),
+            price: data.price.message,
+            website: data.shortUrl,
+            phone: data.contact.formattedPhone,
+            img: [restaurants.formatImg(img)],
+            opening: data.seasonalHours,
+            attributes: restaurants.getAttributes(data.attributes),
             lat: data.location.lat,
             lng: data.location.lng,
-            type: type
+            rating: parseFloat(data.rating / 2).toFixed(2)
         }
     },
 
@@ -119,7 +124,17 @@ const restaurants = {
         if (data.location.neighborhood) {
             return data.location.neighborhood + ", " + data.location.city;
         }
-    }
+    },
+
+    getAttributes: (attributes) => {
+        var formattedAttributes = [];
+        attributes.groups.forEach(group => {
+            group.items.forEach(item => {
+                formattedAttributes.push(item.displayName+" - "+item.displayValue);
+            })
+        })
+        return formattedAttributes;
+    },
 
 };
 

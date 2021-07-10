@@ -15,7 +15,7 @@
 import Navbar from "./components/Navbar.vue";
 import Footer from "./components/Footer.vue";
 import MobileMenu from '@/components/MobileMenu.vue';
-import API from '@/api.js';
+import Account from '@/api/account.js';
 
 export default {
     data: () => ({
@@ -33,15 +33,12 @@ export default {
             }
         },
         logout () {
-            API.postLogout({
-            }).then(res => {
-                if (res.status === 204) {
-                    localStorage.clear();
-                    this.isLoggedIn = false;
-                    this.$router.push('/');  
-                }
+            Account.postLogout({
+            }).then(() => {
+                this.isLoggedIn = false;
+                this.$router.push('/');
             }).catch(error => {
-                this.error = error;
+                this.error = error.error;
             });
         }
     },

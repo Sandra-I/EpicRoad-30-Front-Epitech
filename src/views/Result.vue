@@ -51,7 +51,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id"/>
+                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)"/>
                     <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                 </div>
                 <div class="result">
@@ -62,7 +62,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id"/>
+                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)"/>
                     <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                 </div>
                 <div class="result">
@@ -73,7 +73,7 @@
                             <img alt="filter icon" src="../assets/filter.svg" />
                         </v-btn>
                     </div>
-                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id"/>
+                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)"/>
                     <a href="">See {{ activities.length - 3 }} additional activities ...</a>
                 </div>
             </div>
@@ -88,9 +88,10 @@
 import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
 import GoogleMap from '@/components/GoogleMap.vue';
-import accomodationsApi from "@/api/accomodations";
-import restaurantsApi from "@/api/restaurants";
-import activitiesApi from "@/api/activities";
+import AccomodationsApi from "@/api/accomodations";
+import RestaurantsApi from "@/api/restaurants";
+import ActivitiesApi from "@/api/activities";
+import Favorites from "@/api/favorites"
 
 export default {
     name: "Result",
@@ -105,6 +106,7 @@ export default {
         accomodations: [],
         restaurants: [],
         activities: [],
+        favorites: [],
         markers: {
             "accomodations": [],
             "restaurants": [],
@@ -114,7 +116,7 @@ export default {
     mounted () {
         const currentSearch = JSON.parse(localStorage.getItem('search'))[0];
         this.search = currentSearch;
-        accomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
+        AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
             if (accomodations.length) {
                 this.accomodations = accomodations;
                 // Set Google Map markers
@@ -124,7 +126,7 @@ export default {
                 }))
             }
         });
-        restaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
+        RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
             if (restaurants.length) {
                 this.restaurants = restaurants;
                 // Set Google Map markers
@@ -134,7 +136,7 @@ export default {
                 }))
             }
         });
-        activitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
+        ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
             if (activities.length) {
                 this.activities = activities;
                 // Set Google Map markers
@@ -144,6 +146,17 @@ export default {
                 }))
             }
         });
+        Favorites.getFavorites().then((favorites) => {
+            this.favorites = favorites
+        });
+    },
+    methods: {
+        checkIsFavorite(item) {
+            if (this.favorites.length) {
+                return this.favorites.some((favorite) => favorite.ressourceId === item.id && favorite.type === item.type);
+            }
+            return false;
+        }
     }
 };
 </script>

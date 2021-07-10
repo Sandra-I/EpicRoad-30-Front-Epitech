@@ -1,11 +1,11 @@
 import axios from "axios";
 
-const urlApi = process.env.VUE_APP_URL_API;
+const BASE_URL = process.env.VUE_APP_URL_API;
 const activities = {
 
     getActivities: (lat, lng) => {
         return new Promise((resolve, reject) => {
-            var requestUrl = urlApi + "/api/activities?lat=" + lat + "&lng=" + lng;
+            var requestUrl = BASE_URL + "/api/activities?lat=" + lat + "&lng=" + lng;
             axios.get(requestUrl)
                 .then((response) => {
                     if (response.data.length) {
@@ -22,7 +22,7 @@ const activities = {
 
     getActivityById: (id) => {
         return new Promise((resolve, reject) => {
-            axios.get(urlApi + "/api/activities/" + id)
+            axios.get(BASE_URL + "/api/activities/" + id)
                 .then((response) => {
                     if (response.data) {
                         resolve(activities.formatToDetail(response.data));
@@ -43,7 +43,8 @@ const activities = {
             description: data.shortDescription,
             total: parseInt(data.price.amount),
             lat: data.geoCode.latitude,
-            lng: data.geoCode.longitude
+            lng: data.geoCode.longitude,
+            type: "activity"
         }
     },
 

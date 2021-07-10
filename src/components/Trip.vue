@@ -29,9 +29,6 @@ export default {
             }
             return buffer;
         }
-    },
-    mounted() {
-        console.log(this.active)
     }
 };
 </script>

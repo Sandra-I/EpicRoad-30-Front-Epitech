@@ -54,6 +54,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import SearchBar from '@/components/SearchBar.vue';
 
 export default {
@@ -116,9 +117,24 @@ export default {
         checkForm () {
             var valide = true;
             this.searchBars.forEach((item, index) => {
+                var errors = [];
+                this.errors[index] = [];
                 if (!item.location) {
+                    if (errors[index]) {
+                        errors[index].push('Location is required.');
+                    } else {
+                        errors[index] = ['Location is required.'];
+                    }
+                }
+                if(item.dateIn && item.dateOut && moment(item.dateIn).isAfter(item.dateOut)) {
+                    if (errors[index]) {
+                        errors[index].push('Check out must be after check in.');
+                    } else {
+                        errors[index] = ['Check out must be after check in.'];
+                    }
+                }
+                if (errors.length) {
                     valide = false;
-                    var errors = this.errors[index] ? this.errors[index].push('Location is required.') : this.errors[index] = ['Location is required.'];
                     this.$set(this.errors, index, errors)
                 }
             })

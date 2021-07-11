@@ -139,7 +139,7 @@
             </v-col>
         </v-row>
         <div class="errors" v-if="errors">
-            <span v-for="(error, index) in errors" v-bind:key="index">{{ error }}</span>
+            <span v-for="(error, index) in errors" v-bind:key="index">{{ displayError(error) }}</span>
         </div>
     </div>
 </template>
@@ -202,6 +202,12 @@ export default {
         },
         onUpdateLocation (value) {
             this.searchBarInfo.location = value;
+        },
+        displayError (error) {
+            if (error) {
+                return error.join(" ");
+            }
+            return "";
         }
     },
     watch: {

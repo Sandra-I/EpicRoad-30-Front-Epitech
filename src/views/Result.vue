@@ -89,7 +89,7 @@ import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
 import GoogleMap from '@/components/GoogleMap.vue';
 import AccomodationsApi from "@/api/accomodations";
-import RestaurantsApi from "@/api/restaurants";
+// import RestaurantsApi from "@/api/restaurants";
 import ActivitiesApi from "@/api/activities";
 import Favorites from "@/api/favorites"
 
@@ -126,16 +126,16 @@ export default {
                 }))
             }
         });
-        RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
-            if (restaurants.length) {
-                this.restaurants = restaurants;
-                // Set Google Map markers
-                this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
-                    "lat": parseFloat(restaurant.lat),
-                    "lng": parseFloat(restaurant.lng)
-                }))
-            }
-        });
+        // RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
+        //     if (restaurants.length) {
+        //         this.restaurants = restaurants;
+        //         // Set Google Map markers
+        //         this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
+        //             "lat": parseFloat(restaurant.lat),
+        //             "lng": parseFloat(restaurant.lng)
+        //         }))
+        //     }
+        // });
         ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
             if (activities.length) {
                 this.activities = activities;
@@ -145,7 +145,8 @@ export default {
                     "lng": parseFloat(activity.lng)
                 }))
             }
-        });
+        })
+        .catch(err => console.log(err));
         Favorites.getFavorites().then((favorites) => {
             this.favorites = favorites
         });

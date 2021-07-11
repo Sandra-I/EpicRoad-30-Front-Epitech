@@ -12,7 +12,10 @@ const activities = {
                         const data = response.data.map(activity => activities.formatToResult(activity));
                         resolve(data);
                     }
-                    reject();
+                    if (response.data.code == "ClientError") {
+                        reject(response.data.response.body);
+                    }
+                    resolve([]);
                 })
                 .catch((error) => {
                     reject(error);
@@ -41,9 +44,9 @@ const activities = {
             img: data.pictures[0],
             name: data.name,
             description: data.shortDescription,
-            total: parseInt(data.price.amount),
-            lat: data.geoCode.latitude,
-            lng: data.geoCode.longitude,
+            total: (data.price) ? parseInt(data.price.amount) : "",
+            lat: (data.geoCode) ? data.geoCode.latitude : "",
+            lng: (data.geoCode) ? data.geoCode.longitude: "",
             type: "activity"
         }
     },
@@ -55,10 +58,10 @@ const activities = {
             name: data.name,
             rating: parseFloat(data.rating).toFixed(2),
             description: data.shortDescription,
-            total: parseInt(data.price.amount).toFixed(2),
+            total: (data.price) ? parseInt(data.price.amount).toFixed(2) : "",
             website: data.bookingLink,
-            lat: data.geoCode.latitude,
-            lng: data.geoCode.longitude
+            lat: (data.geoCode) ? data.geoCode.latitude : "",
+            lng: (data.geoCode) ? data.geoCode.longitude: ""
         }
     }
 

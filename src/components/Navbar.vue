@@ -1,6 +1,6 @@
 <template>
-    <v-app-bar class="navbar gutter">
-        <v-row justify="space-between"  align="center">
+    <v-app-bar flat color="white" class="navbar gutter">
+        <v-row justify="space-between" align="center">
             <v-col cols="1" xs="1" sm="1" md="1" lg="1">
                 <img
                     class="logo"
@@ -13,7 +13,7 @@
             <v-col cols="4" xs="4" sm="4" md="3" lg="3" class="user-section">
                 <v-row align="center" justify="end">
                     <template v-if="isLoggedIn">
-                        <v-btn icon large class="pr-5" @click="$router.push('favorites')">
+                        <v-btn icon large @click="$router.push('favorites')">
                             <img src="../assets/heart.svg" />
                         </v-btn>
                     </template>
@@ -61,7 +61,7 @@ export default {
     align-items: center;
     padding: 20px 0;
     height: fit-content !important;
-    // margin-bottom: 50px;
+    margin-bottom: 50px;
 
     button {
         img {
@@ -77,7 +77,6 @@ export default {
     }
 
     .user-section {
-        text-align: right;
         button {
             margin-left: 30px;
             img {

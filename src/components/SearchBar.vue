@@ -3,11 +3,10 @@
         <v-row justify="space-between"  align="center">
             <v-col cols="12" xs="12" sm="12" md="12" lg="12">
                 <v-row justify="center" align="center">
-                    <v-col cols="5" xs="5" sm="5" md="4" lg="4">
-                        <!-- TO DO: vérifier couleur de clear-icon-->
-                        <AddressInput @autocomplete="onUpdateLocation"/>
+                    <v-col cols="6" xs="6" sm="6" md="5" lg="5">
+                        <AddressInput @autocomplete="onUpdateLocation" :savedAddress="formattedAddress"/>
                     </v-col>
-                    <v-col cols="4" xs="4" sm="4" md="5" lg="4">
+                    <v-col cols="4" xs="4" sm="4" md="4" lg="4">
                         <v-row>
                             <v-col cols="6" xs="6" sm="6" md="6" lg="6" class="attached">
                                 <v-menu
@@ -27,6 +26,8 @@
                                             v-bind="attrs"
                                             v-on="on"
                                             solo
+                                            flat
+                                            background-color="#f5f5f5"
                                             hide-details="auto"
                                         ></v-text-field>
                                     </template>
@@ -73,6 +74,8 @@
                                             v-bind="attrs"
                                             v-on="on"
                                             solo
+                                            flat
+                                            background-color="#f5f5f5"
                                             hide-details="auto"
                                         ></v-text-field>
                                     </template>
@@ -103,14 +106,14 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="4" xs="4" sm="4" md="4" lg="4">
+                    <v-col cols="3" xs="3" sm="3" md="3" lg="3">
                         <v-row>
-                            <!-- TO ASK Bastien : avec ou sans pour la place pour le bouton ? -->
-                            <!-- cols="6" xs="6" sm="6" md="6" lg="6"  -->
-                            <v-col class="attached">
+                            <v-col cols="10" xs="10" sm="10" md="10" lg="10">
                                 <v-text-field
-                                    class="input"
+                                    class="input budget-input"
                                     solo
+                                    flat
+                                    background-color="#f5f5f5"
                                     label="Budget"
                                     hide-details="auto"
                                     v-model="searchBarInfo.budgetAmount"
@@ -123,21 +126,13 @@
                                     v-model="searchBarInfo.budgetAmount"
                                     thumb-color="primary"
                                     min=0
-                                    max=9999
+                                    max=1500
                                     v-if="this.showSliderBudget"
                                 ></v-slider>
                             </v-col>
-                            <template v-if="showDeleteButton">
-                                <v-col cols="6" xs="6" sm="6" md="6" lg="6" 
-                                    class="attached d-flex justify-center align-center">
-                                    <v-btn 
-                                        color="secondary"
-                                        @click="$emit('remove')"
-                                    >
-                                        Supprimer
-                                    </v-btn>
-                                </v-col>
-                            </template>
+                            <v-col v-if="showDeleteButton" cols="2" xs="2" sm="2" md="2" lg="2" class="attached d-flex justify-center align-center">
+                                <img class="remove" src="../assets/cancel-black.svg" @click="$emit('remove')">
+                            </v-col>
                         </v-row>
                     </v-col>
                 </v-row>
@@ -155,6 +150,14 @@ import AddressInput from "@/components/AddressInput.vue";
 export default {
     name: "SearchBar",
     components: {AddressInput},
+    props: {
+        savedSearch: Object,
+        showDeleteButton: {
+            default: false,
+            required: true
+        },
+        errors: Array,
+    },
     data: () => ({
         searchBarInfo: {
             location: '',
@@ -162,16 +165,19 @@ export default {
             dateOut: '',
             budgetAmount: ''
         },
+        formattedAddress: '',
         menuIn: false,
         menuOut: false,
         showSliderBudget: false
     }),
-    props: {
-        errors: Array,
-        showDeleteButton: {
-            default: false,
-            required: true
-        },
+    mounted() {
+        if (this.savedSearch.location) {
+            this.formattedAddress = this.savedSearch.location.formatted_address;
+            this.searchBarInfo.location = this.savedSearch.location.formatted_address;
+            this.searchBarInfo.dateIn = this.savedSearch.dateIn;
+            this.searchBarInfo.dateOut = this.savedSearch.dateOut;
+            this.searchBarInfo.budgetAmount = this.savedSearch.budgetAmount;
+        }
     },
     computed: {
         formatedDateIn () {
@@ -212,10 +218,6 @@ export default {
 <style scoped lang="scss">
 .searchBar {
     padding: 20px 0;
-    .search-btn {
-        width: 45px !important;
-        height: 45px !important;
-    }
 
     img {
         height: 16px;
@@ -237,13 +239,21 @@ export default {
         }
     }
 
-}
+    .budget-input {
+        border-radius: 20px;
+    }
 
-.errors {
-    margin-top: 20px;
-    span {
-        display: block;
-        color: red;
+    .remove {
+        cursor: pointer;
+    }
+
+    .errors {
+        margin-top: 20px;
+        span {
+            display: block;
+            color: red;
+        }
     }
 }
+
 </style>

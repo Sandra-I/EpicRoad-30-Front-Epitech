@@ -12,7 +12,7 @@ const accomodations = {
                         const data = response.data.map(accomodation => accomodations.formatToResult(accomodation));
                         resolve(data);
                     }
-                    reject();
+                    resolve([]);
                 })
                 .catch((error) => {
                     reject(error);

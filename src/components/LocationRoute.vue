@@ -18,7 +18,7 @@
                 </div>
             </li>
         </ul>
-        <a class="edit-route" href="">Edit this route</a>
+        <a class="edit-route" @click="$router.push('/')">Edit this route</a>
     </div>
 </template>
 

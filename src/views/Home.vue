@@ -1,11 +1,6 @@
 <template>
 	<v-container fluid>
 		<v-row>
-			<v-col class="d-flex justify-center">
-				<h1>{{ homePageTitle | capitalize }}</h1>
-			</v-col>
-		</v-row>
-		<v-row>
 			<v-col>
 				<SearchBloc/>
 			</v-col>
@@ -44,13 +39,6 @@ export default {
 				{ title: 'Best air', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
 				{ title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' }
 			],
-		}
-	},
-	filters: {
-		capitalize: function (value) {
-			if (!value) return '';
-			value = value.toString();
-			return value.toUpperCase();
 		}
 	}
 }

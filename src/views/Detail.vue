@@ -220,7 +220,6 @@ export default {
                     restaurantsApi
                         .getEatById(item_id)
                         .then((restaurant) => {
-                            console.log(restaurant);
                             this.item = restaurant;
                         })
                         .catch((e) => {
@@ -229,7 +228,6 @@ export default {
                     break;
                 case "drink":
                     restaurantsApi.getDrinkById(item_id).then((restaurant) => {
-                        console.log(restaurant);
                         this.item = restaurant;
                     });
                     break;

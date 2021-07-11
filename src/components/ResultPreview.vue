@@ -1,7 +1,7 @@
 <template>
     <div class="result-preview" @click="getDetailRoute()">
         <div class="square">
-            <img v-if="!result.img" alt="accomodation 1" :src="img_placeholder" />
+            <img v-if="!result.img" alt="accomodation 1" :src="imgPlaceholder" />
             <img v-if="result.img" alt="accomodation 1" :src="result.img" />
         </div>
         <div class="details">
@@ -22,16 +22,17 @@ import Favorites from "@/api/favorites"
 
 export default {
     name: "ResultPreview",
-    props: ["result","route","isFavorite"],
-    data: () => ({
+    props: ["result", "route", "isFavorite"],
+    data: (vm) => ({
         icon: "",
         favoriteIcon: require('../assets/heart.svg'),
         isFavoriteIcon: require('../assets/heart-full.svg'),
-        img_placeholder: require('../assets/img_placeholder.jpg'),
+        imgPlaceholder: require('../assets/img_placeholder.jpg'),
+        favoriteStatus: vm.isFavorite
+
     }),
     mounted () {
-        this.icon = this.isFavorite ? this.isFavoriteIcon : this.favoriteIcon;
-        console.log(this.isFavorite)
+        this.icon = this.favoriteStatus ? this.isFavoriteIcon : this.favoriteIcon;
     },
     methods: {
         getDetailRoute () {
@@ -39,16 +40,15 @@ export default {
         },
         manageFavorite (type, id, e) {
             e.stopPropagation();
-            if (!this.isFavorite) {
+            if (!this.favoriteStatus) {
                 Favorites.addFavorite(type, id).then(() => {
                     this.icon = this.isFavoriteIcon;
-                    this.isFavorite = true;
+                    this.favoriteStatus = true;
                 });
             } else {
-                console.log(id)
                 Favorites.removeFavorite(id).then(() => {
                     this.icon = this.favoriteIcon;
-                    this.isFavorite = false;
+                    this.favoriteStatus = false;
                 });
                 this.icon = this.favoriteIcon;
                 this.$emit("remove");

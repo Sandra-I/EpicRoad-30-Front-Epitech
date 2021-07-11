@@ -47,7 +47,7 @@ const restaurants = {
                         var data = restaurants.formatToDetail(response.data, BASE_URL+"/api/eats/"+id+"/thumbnails");
                         resolve(data);
                     }
-                    reject("Empty data");
+                    reject("No eat found");
                 })
                 .catch((error) => {
                     reject(error);
@@ -80,7 +80,7 @@ const restaurants = {
                         var data = restaurants.formatToDetail(response.data, BASE_URL+"/api/drinks/"+id+"/thumbnails");
                         resolve(data);
                     }
-                    reject("Empty data");
+                    reject("No drink found");
                 })
                 .catch((error) => {
                     reject(error);
@@ -108,7 +108,7 @@ const restaurants = {
             price: data.price.message,
             website: data.shortUrl,
             phone: data.contact.formattedPhone,
-            img: [restaurants.formatImg(img)],
+            img: [img],
             opening: data.seasonalHours,
             attributes: restaurants.getAttributes(data.attributes),
             lat: data.location.lat,

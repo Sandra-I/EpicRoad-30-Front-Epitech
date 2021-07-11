@@ -5,7 +5,7 @@
             <img v-if="result.img" alt="accomodation 1" :src="result.img" />
         </div>
         <div class="details">
-            <img class="favorite-icon" :src="icon" @click="manageFavorite(result.type, result.id, $event)">
+            <img v-if="isLoggedIn" class="favorite-icon" :src="icon" @click="manageFavorite(result.type, result.id, $event)">
             <label class="name">{{ result.name }}</label>
             <span v-if="result.address">{{ result.address }}</span>
             <span v-if="result.description" class="description">{{ result.description }}</span>
@@ -22,7 +22,7 @@ import Favorites from "@/api/favorites"
 
 export default {
     name: "ResultPreview",
-    props: ["result", "route", "isFavorite"],
+    props: ["result", "route", "isFavorite","isLoggedIn"],
     data: (vm) => ({
         icon: "",
         favoriteIcon: require('../assets/heart.svg'),

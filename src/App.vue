@@ -3,7 +3,7 @@
         <div v-if="hideMobileMenu">
             <Navbar @onHiddenMobileMenu="onHiddenMobileMenu" :isLoggedIn="isLoggedIn" @logout="logout"/>
             <div class="content gutter">
-                <router-view @loggedIn="checkIsLoggedIn"/>
+                <router-view @loggedIn="checkIsLoggedIn" :isLoggedIn="isLoggedIn"/>
             </div>
             <Footer />
         </div>

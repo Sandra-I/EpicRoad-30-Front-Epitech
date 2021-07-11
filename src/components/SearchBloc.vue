@@ -95,7 +95,7 @@ export default {
                 const savedSearch = JSON.parse(localStorage.getItem('search'));
                 if (savedSearch) {
                     this.searchBars.forEach((value, index) => {
-                        if (value.location == savedSearch[index].location.formatted_address) {
+                        if (savedSearch[index] && value.location == savedSearch[index].location.formatted_address) {
                             this.searchBars[index].location = savedSearch[index].location
                         }
                     });

@@ -2,7 +2,6 @@
     <div class="result">
         <div class="section">
             <h2>Location on your trip</h2>
-            <img class="favorite" :src="favoriteIcon">
             <LocationRoute />
         </div>
         <div class="section">
@@ -46,34 +45,22 @@
                 <div class="result">
                     <div class="header">
                         <h3>Accomodations</h3>
-                        <v-btn text class="filter">
-                            Filters
-                            <img alt="filter icon" src="../assets/filter.svg" />
-                        </v-btn>
                     </div>
-                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)"/>
+                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)" :isLoggedIn="isLoggedIn"/>
                     <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
                         <h3>Bars & Restaurants</h3>
-                        <v-btn text class="filter">
-                            Filters
-                            <img alt="filter icon" src="../assets/filter.svg" />
-                        </v-btn>
                     </div>
-                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)"/>
+                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)" :isLoggedIn="isLoggedIn"/>
                     <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
                         <h3>Activities</h3>
-                        <v-btn text class="filter">
-                            Filters
-                            <img alt="filter icon" src="../assets/filter.svg" />
-                        </v-btn>
                     </div>
-                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)"/>
+                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)" :isLoggedIn="isLoggedIn"/>
                     <a href="">See {{ activities.length - 3 }} additional activities ...</a>
                 </div>
             </div>
@@ -88,9 +75,9 @@
 import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
 import GoogleMap from '@/components/GoogleMap.vue';
-import AccomodationsApi from "@/api/accomodations";
+// import AccomodationsApi from "@/api/accomodations";
 // import RestaurantsApi from "@/api/restaurants";
-import ActivitiesApi from "@/api/activities";
+// import ActivitiesApi from "@/api/activities";
 import Favorites from "@/api/favorites"
 
 export default {
@@ -99,6 +86,9 @@ export default {
         LocationRoute,
         ResultPreview,
         GoogleMap
+    },
+    props: {
+        isLoggedIn: Boolean
     },
     data: () => ({
         favoriteIcon: require('../assets/heart.svg'),
@@ -116,16 +106,16 @@ export default {
     mounted () {
         const currentSearch = JSON.parse(localStorage.getItem('search'))[0];
         this.search = currentSearch;
-        AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
-            if (accomodations.length) {
-                this.accomodations = accomodations;
-                // Set Google Map markers
-                this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
-                    "lat": parseFloat(accomodation.lat),
-                    "lng": parseFloat(accomodation.lng)
-                }))
-            }
-        });
+        // AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
+        //     if (accomodations.length) {
+        //         this.accomodations = accomodations;
+        //         // Set Google Map markers
+        //         this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
+        //             "lat": parseFloat(accomodation.lat),
+        //             "lng": parseFloat(accomodation.lng)
+        //         }))
+        //     }
+        // });
         // RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
         //     if (restaurants.length) {
         //         this.restaurants = restaurants;
@@ -136,20 +126,21 @@ export default {
         //         }))
         //     }
         // });
-        ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
-            if (activities.length) {
-                this.activities = activities;
-                // Set Google Map markers
-                this.markers.activities = this.activities.slice(0, 3).map(activity => ({
-                    "lat": parseFloat(activity.lat),
-                    "lng": parseFloat(activity.lng)
-                }))
-            }
-        })
-        .catch(err => console.log(err));
-        Favorites.getFavorites().then((favorites) => {
-            this.favorites = favorites
-        });
+        // ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
+        //     if (activities.length) {
+        //         this.activities = activities;
+        //         // Set Google Map markers
+        //         this.markers.activities = this.activities.slice(0, 3).map(activity => ({
+        //             "lat": parseFloat(activity.lat),
+        //             "lng": parseFloat(activity.lng)
+        //         }))
+        //     }
+        // })
+        if (this.isLoggedIn) {
+            Favorites.getFavorites().then((favorites) => {
+                this.favorites = favorites
+            });
+        }
     },
     methods: {
         checkIsFavorite(item) {

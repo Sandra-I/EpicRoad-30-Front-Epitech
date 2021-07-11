@@ -5,15 +5,15 @@
             <div class="content gutter">
                 <router-view @loggedIn="checkIsLoggedIn" :isLoggedIn="isLoggedIn"/>
             </div>
-            <Footer />
+            <Footer :isLoggedIn="isLoggedIn"/>
         </div>
         <MobileMenu v-if="!hideMobileMenu" @onHiddenMobileMenu="onHiddenMobileMenu" :isLoggedIn="isLoggedIn" @logout="logout"/>
     </v-app>
 </template>
 
 <script>
-import Navbar from "./components/Navbar.vue";
-import Footer from "./components/Footer.vue";
+import Navbar from "@/components/Navbar.vue";
+import Footer from "@/components/Footer.vue";
 import MobileMenu from '@/components/MobileMenu.vue';
 import Account from '@/api/account.js';
 

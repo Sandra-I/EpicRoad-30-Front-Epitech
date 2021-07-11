@@ -3,22 +3,22 @@
         <v-row>
             <v-col cols="12" xs="12" sm="4" md="2" lg="3">
                 <ul>
-                    <li>Login</li>
-                    <li>Register</li>
-                    <li>Profile</li>
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/signup">Register</a></li>
+                    <li v-if="isLoggedIn"><a href="">Favorites</a></li>
                 </ul>
             </v-col>
             <v-col cols="12" xs="12" sm="4" md="3" lg="3">
                 <ul>
-                    <li>Accomodation in Paris</li>
-                    <li>Restaurants in Paris</li>
-                    <li>Activities in Paris</li>
+                    <li><a href="">Accomodation in Paris</a></li>
+                    <li><a href="">Restaurants in Paris</a></li>
+                    <li><a href="">Activities in Paris</a></li>
                 </ul>
             </v-col>
             <v-col cols="12" xs="12" sm="4" md="3" lg="3">
                 <ul>
-                    <li>Homepage</li>
-                    <li>Legal mentions</li>
+                    <li><a href="/">Homepage</a></li>
+                    <li><a href="/legalMentions">Legal mentions</a></li>
                 </ul>
             </v-col>
             <v-col cols="12" xs="12" sm="12" md="4" lg="3" class="logo">
@@ -32,6 +32,12 @@
 <script>
 export default {
     name: "Footer",
+    props: {
+        isLoggedIn: {
+            type: Boolean,
+            default: false
+        }
+    }
 };
 </script>
 
@@ -61,6 +67,11 @@ export default {
             font-weight: 500;
             text-align: left;
             margin-bottom: 15px;
+
+            a {
+                color: #fff;
+                text-decoration-line: none;
+            }
         }
     }
 

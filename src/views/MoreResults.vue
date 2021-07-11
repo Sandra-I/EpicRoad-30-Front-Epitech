@@ -1,10 +1,11 @@
 <template>
     <div class="favorite">
-        <h2>All your favorites</h2>
-        <v-row class="favorites" v-if="favorites.length">
-            <ResultPreview :result="favorite" v-for="favorite in favorites" :key="favorite.id" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" :isLoggedIn="isLoggedIn" @remove="removeFavorite(favorite)"/>
+        <h2>More Results</h2>
+        <v-row class="favorites">
+            <v-col cols="12" xs="12" sm="12" md="6" lg="6" class="favorite" v-for="result in moreResults" :key="result.id">
+                <ResultPreview :result="result" :route="'/detail/' + result.type + '/' + result.ressourceId" :isFavorite="true" @remove="removeFavorite(favorite)"/>
+            </v-col>
         </v-row>
-        <span v-else>No favorites to display.</span>
     </div>
 </template>
 
@@ -16,20 +17,16 @@ import ActivitiesApi from "@/api/activities";
 import Favorites from "@/api/favorites";
 
 export default {
-    name: "Favorite",
-    props: {
-        isLoggedIn: Boolean
-    },
+    name: "MoreResults",
     components: {
         ResultPreview,
     },
     data: () => ({
-        favorites: [],
-        hasFavorite: false
+        moreResults: []
     }),
     mounted() {
+        this.moreResults = this.$route.query.moreResults;
         Favorites.getFavorites().then((favorites) => {
-            if (Object.keys(favorites).length != 0) this.hasFavorite = true;
             favorites.forEach((favorite) => {
                 switch (favorite.type) {
                     case "accomodation":
@@ -69,20 +66,13 @@ export default {
     h2 {
         margin-bottom: 50px;
     }
-}
-
-@media screen and (min-width: 960px) {
-    .favorite {
-        .favorites {
-            .result-preview {
-                max-width: 50%;
-                &:nth-child(2n) {
-                    padding-left: 3%;
-                }
-                &:nth-child(2n+1) {
-                    padding-right: 3%;
-                }
-            }
+    .trips {
+        display: flex;
+        margin-bottom: 50px;
+    }
+    .detail-trips {
+        .detail {
+            margin-bottom: 100px;
         }
     }
 }

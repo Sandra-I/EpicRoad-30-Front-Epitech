@@ -47,25 +47,25 @@
                         <h3>Accomodations</h3>
                     </div>
                     <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)" :isLoggedIn="isLoggedIn"/>
-                    <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
+                    <a v-if="accomodations.length > 3" href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
                         <h3>Bars & Restaurants</h3>
                     </div>
                     <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)" :isLoggedIn="isLoggedIn"/>
-                    <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
+                    <a v-if="restaurants.length > 3" href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                 </div>
                 <div class="result">
                     <div class="header">
                         <h3>Activities</h3>
                     </div>
                     <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)" :isLoggedIn="isLoggedIn"/>
-                    <a href="">See {{ activities.length - 3 }} additional activities ...</a>
+                    <a v-if="activities.length > 3" href="">See {{ activities.length - 3 }} additional activities ...</a>
                 </div>
             </div>
             <div class="map">
-                <GoogleMap :markers="markers"/>
+                <GoogleMap :markers="markers" :center="centerGoogleMap"/>
             </div>
         </div>
     </div>
@@ -75,9 +75,9 @@
 import LocationRoute from "@/components/LocationRoute.vue";
 import ResultPreview from "@/components/ResultPreview.vue";
 import GoogleMap from '@/components/GoogleMap.vue';
-// import AccomodationsApi from "@/api/accomodations";
-// import RestaurantsApi from "@/api/restaurants";
-// import ActivitiesApi from "@/api/activities";
+import AccomodationsApi from "@/api/accomodations";
+import RestaurantsApi from "@/api/restaurants";
+import ActivitiesApi from "@/api/activities";
 import Favorites from "@/api/favorites"
 
 export default {
@@ -101,41 +101,43 @@ export default {
             "accomodations": [],
             "restaurants": [],
             "activities": []
-        }
+        },
+        centerGoogleMap: { lat: 48.854, lng: 2.347 }
     }),
     mounted () {
         const currentSearch = JSON.parse(localStorage.getItem('search'))[0];
+        this.centerGoogleMap = { lat: currentSearch.location.lat, lng: currentSearch.location.lng };
         this.search = currentSearch;
-        // AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
-        //     if (accomodations.length) {
-        //         this.accomodations = accomodations;
-        //         // Set Google Map markers
-        //         this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
-        //             "lat": parseFloat(accomodation.lat),
-        //             "lng": parseFloat(accomodation.lng)
-        //         }))
-        //     }
-        // });
-        // RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
-        //     if (restaurants.length) {
-        //         this.restaurants = restaurants;
-        //         // Set Google Map markers
-        //         this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
-        //             "lat": parseFloat(restaurant.lat),
-        //             "lng": parseFloat(restaurant.lng)
-        //         }))
-        //     }
-        // });
-        // ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
-        //     if (activities.length) {
-        //         this.activities = activities;
-        //         // Set Google Map markers
-        //         this.markers.activities = this.activities.slice(0, 3).map(activity => ({
-        //             "lat": parseFloat(activity.lat),
-        //             "lng": parseFloat(activity.lng)
-        //         }))
-        //     }
-        // })
+        AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
+            if (accomodations.length) {
+                this.accomodations = accomodations;
+                // Set Google Map markers
+                this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
+                    "lat": parseFloat(accomodation.lat),
+                    "lng": parseFloat(accomodation.lng)
+                }))
+            }
+        });
+        RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
+            if (restaurants.length) {
+                this.restaurants = restaurants;
+                // Set Google Map markers
+                this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
+                    "lat": parseFloat(restaurant.lat),
+                    "lng": parseFloat(restaurant.lng)
+                }))
+            }
+        });
+        ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
+            if (activities.length) {
+                this.activities = activities;
+                // Set Google Map markers
+                this.markers.activities = this.activities.slice(0, 3).map(activity => ({
+                    "lat": parseFloat(activity.lat),
+                    "lng": parseFloat(activity.lng)
+                }))
+            }
+        })
         if (this.isLoggedIn) {
             Favorites.getFavorites().then((favorites) => {
                 this.favorites = favorites

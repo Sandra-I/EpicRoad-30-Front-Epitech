@@ -5,7 +5,7 @@ const accomodations = {
 
     getAccomodations: (lat, lng, budget) => {
         return new Promise((resolve, reject) => {
-            var requestUrl = BASE_URL + "/api/hotels?radius=20&latitude=" + lat + "&longitude=" + lng + (budget ? "&priceRange=0-"+(0.9*budget)+"&currency=EUR" : "");
+            var requestUrl = BASE_URL + "/api/hotels?radius=30&latitude=" + lat + "&longitude=" + lng + (budget ? "&priceRange=0-"+(0.9*budget)+"&currency=EUR" : "");
             axios.get(requestUrl)
                 .then((response) => {
                     if (response.data.length) {

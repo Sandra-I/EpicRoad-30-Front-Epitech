@@ -37,24 +37,13 @@ import restaurantIcon from "../assets/restaurant-map.png";
 
 export default {
     name: "GoogleMap",
-    props: ["markers"],
+    props: ["markers","center"],
     data() {
         return {
-            center: { lat: 48.854, lng: 2.347 },
             bedIcon: bedIcon,
             activityIcon: activityIcon,
             restaurantIcon: restaurantIcon
         };
-    },
-    watch: {
-        markers: {
-            handler(value) {
-                if (value.restaurants[0] && value.restaurants[0].lat && value.restaurants[0].lng) {
-                    this.center = { lat: value.restaurants[0].lat, lng: value.restaurants[0].lng};
-                }
-            },
-            deep: true
-        }
     }
 };
 </script>

@@ -5,7 +5,7 @@
                 <ul>
                     <li><a href="/login">Login</a></li>
                     <li><a href="/signup">Register</a></li>
-                    <!-- <li><a href="">Profile</a></li> -->
+                    <li v-if="isLoggedIn"><a href="">Favorites</a></li>
                 </ul>
             </v-col>
             <v-col cols="12" xs="12" sm="4" md="3" lg="3">
@@ -32,6 +32,12 @@
 <script>
 export default {
     name: "Footer",
+    props: {
+        isLoggedIn: {
+            type: Boolean,
+            default: false
+        }
+    }
 };
 </script>
 

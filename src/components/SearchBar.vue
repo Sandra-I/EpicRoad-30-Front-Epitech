@@ -27,7 +27,7 @@
                                             v-on="on"
                                             solo
                                             flat
-                                            background-color="#f5f5f5"
+                                            background-color="#ececec"
                                             hide-details="auto"
                                         ></v-text-field>
                                     </template>
@@ -75,7 +75,7 @@
                                             v-on="on"
                                             solo
                                             flat
-                                            background-color="#f5f5f5"
+                                            background-color="#ececec"
                                             hide-details="auto"
                                         ></v-text-field>
                                     </template>
@@ -113,7 +113,7 @@
                                     class="input budget-input"
                                     solo
                                     flat
-                                    background-color="#f5f5f5"
+                                    background-color="#ececec"
                                     label="Budget"
                                     hide-details="auto"
                                     v-model="searchBarInfo.budgetAmount"

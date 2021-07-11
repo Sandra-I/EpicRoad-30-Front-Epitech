@@ -2,23 +2,25 @@
     <div class="route">
         <ul>
             <li v-for="route in routes" v-bind:key="route.id">
-                <label>{{ route.location.formatted_address }}</label>
-                <div class="details">
-                    <div>
-                        <span v-if="route.dateIn && route.dateOut"
-                            >{{ formatDate(route.dateIn) }} to
-                            {{ formatDate(route.dateOut) }}
-                        </span>
-                    </div>
-                    <div>
-                        <span v-if="route.budgetAmount"
-                            >Budget : {{ route.budgetAmount }} €</span
-                        >
-                    </div>
-                    <div class="selection">
-                        <img alt="restaurant logo" :src="restaurantIcon" />
-                        <img alt="bicycle logo" :src="activityIcon" />
-                        <img alt="bed logo" :src="bedIcon" />
+                <div class="route-container" v-bind:class="{active: route.id == currentSearch.id}" @click="updateCurrentSearch(route.id)">
+                    <label>{{ route.location.formatted_address }}</label>
+                    <div class="details">
+                        <div>
+                            <span v-if="route.dateIn && route.dateOut"
+                                >{{ formatDate(route.dateIn) }} to
+                                {{ formatDate(route.dateOut) }}
+                            </span>
+                        </div>
+                        <div>
+                            <span v-if="route.budgetAmount"
+                                >Budget : {{ route.budgetAmount }} €</span
+                            >
+                        </div>
+                        <div class="selection">
+                            <img alt="restaurant logo" :src="restaurantIcon" />
+                            <img alt="bicycle logo" :src="activityIcon" />
+                            <img alt="bed logo" :src="bedIcon" />
+                        </div>
                     </div>
                 </div>
             </li>
@@ -66,7 +68,7 @@ import Transports from "@/api/transports";
 
 export default {
     name: "LocationRoute",
-    props: ["inMenu"],
+    props: ["inMenu", "currentSearch"],
     data: (vm) => ({
         routes: [],
         bedIcon: vm.inMenu ? bedIconLight : bedIcon,
@@ -139,6 +141,9 @@ export default {
                 console.error(error.message);
             }
         },
+        updateCurrentSearch(routeId) {
+            this.$emit("update-current-search", routeId);
+        }
     },
 };
 </script>
@@ -156,8 +161,8 @@ export default {
             display: inline-block;
             position: absolute;
             left: 16px;
-            top: 8px;
-            height: calc(100% - 60px);
+            top: 28px;
+            height: calc(100% - 90px);
             border-left: dashed 3px var(--v-primary-base);
         }
 
@@ -175,12 +180,21 @@ export default {
                 background: var(--v-primary-base);
                 position: absolute;
                 left: 0;
-                top: 5px;
+                top: 25px;
                 border-radius: 15px;
             }
 
             label {
                 font-weight: 400;
+            }
+
+            .route-container {
+                cursor: pointer;
+                padding: 20px 30px;
+                &.active {
+                    border-radius: 20px;
+                    background-color: #e6e6e6;
+                }
             }
         }
 

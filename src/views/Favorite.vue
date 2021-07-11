@@ -3,7 +3,7 @@
         <h2>All your favorites</h2>
         <v-row class="favorites">
             <v-col cols="12" xs="12" sm="12" md="12" lg="6" class="favorite" v-for="favorite in favorites" :key="favorite.id">
-                <ResultPreview :result="favorite" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" @remove="removeFavorite(favorite)"/>
+                <ResultPreview :result="favorite" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" :isLoggedIn="isLoggedIn" @remove="removeFavorite(favorite)"/>
             </v-col>
         </v-row>
     </div>
@@ -18,6 +18,9 @@ import Favorites from "@/api/favorites";
 
 export default {
     name: "Favorite",
+    props: {
+        isLoggedIn: Boolean
+    },
     components: {
         ResultPreview,
     },

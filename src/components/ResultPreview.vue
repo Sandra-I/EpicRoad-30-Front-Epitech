@@ -1,7 +1,7 @@
 <template>
     <div class="result-preview" @click="getDetailRoute()">
         <div class="square">
-            <img v-if="!result.img" alt="accomodation 1" :src="imgPlaceholder" />
+            <img v-if="!result.img" alt="accomodation 1" src="../assets/img_placeholder.jpg"/>
             <img v-if="result.img" alt="accomodation 1" :src="result.img" />
         </div>
         <div class="details">
@@ -22,12 +22,11 @@ import Favorites from "@/api/favorites"
 
 export default {
     name: "ResultPreview",
-    props: ["result", "route", "isFavorite","isLoggedIn"],
+    props: ["result", "route", "isFavorite", "isLoggedIn"],
     data: (vm) => ({
         icon: "",
         favoriteIcon: require('../assets/heart.svg'),
         isFavoriteIcon: require('../assets/heart-full.svg'),
-        imgPlaceholder: require('../assets/img_placeholder.jpg'),
         favoriteStatus: vm.isFavorite
 
     }),

@@ -2,19 +2,20 @@
     <div class="result">
         <div class="section">
             <h2>Location on your trip</h2>
-            <LocationRoute />
+            <LocationRoute :currentSearch="currentSearch" @update-current-search="updateCurrentSearch"/>
         </div>
         <div class="section">
-            <h2 v-if="search.budgetAmount">
-                Everything you want in <strong>{{ search.location.city }}</strong> for <strong>{{ search.budgetAmount }} €</strong>
+            <h2 v-if="currentSearch.budgetAmount">
+                Everything you want in <strong>{{ currentSearch.location.city }}</strong> for <strong>{{ currentSearch.budgetAmount }} €</strong>
             </h2>
             <h2 v-else>
-                Everything you want in <strong>{{ search.location.city }}</strong>
+                Everything you want in <strong>{{ currentSearch.location.city }}</strong>
             </h2>
             <div class="selection">
                 <div class="item" v-if="accomodations[0]" @click="$router.push('/detail/accomodation/'+accomodations[0].id)">
                     <div class="square">
-                        <img alt="accomodation-suggestion" :src="accomodations[0].img" />
+                        <img v-if="accomodations[0].img" alt="accomodation-suggestion" :src="accomodations[0].img" />
+                        <img v-if="!accomodations[0].img" alt="accomodation-suggestion" src="../assets/img_placeholder.jpg"/>
                     </div>
                     <div class="details">
                         <label class="place">{{ accomodations[0].name }}</label>
@@ -23,7 +24,8 @@
                 </div>
                 <div class="item" v-if="restaurants[0]" @click="$router.push('/detail/'+restaurants[0].type+'/'+restaurants[0].id)">
                     <div class="square">
-                        <img alt="restaurant-suggestion" :src="restaurants[0].img" />
+                        <img v-if="restaurants[0].img" alt="restaurant-suggestion" :src="restaurants[0].img" />
+                        <img v-if="!restaurants[0].img" alt="restaurant-suggestion" src="../assets/img_placeholder.jpg"/>
                     </div>
                     <div class="details">
                         <label class="place">{{ restaurants[0].name }}</label>
@@ -31,7 +33,8 @@
                 </div>
                 <div class="item" v-if="activities[0]" @click="$router.push('/detail/activity/'+activities[0].id)">
                     <div class="square">
-                        <img alt="activity-suggestion" :src="activities[0].img"/>
+                        <img v-if="activities[0].img" alt="activities-suggestion" :src="activities[0].img" />
+                        <img v-if="!activities[0].img" alt="activities-suggestion" src="../assets/img_placeholder.jpg"/>
                     </div>
                     <div class="details">
                         <label class="place">{{ activities[0].name }}</label>
@@ -48,6 +51,7 @@
                     </div>
                     <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)" :isLoggedIn="isLoggedIn"/>
                     <a v-if="accomodations.length > 3" href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
+                    <label v-if="accomodations.length == 0">No accomodations found in this area.</label>
                 </div>
                 <div class="result">
                     <div class="header">
@@ -55,6 +59,7 @@
                     </div>
                     <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)" :isLoggedIn="isLoggedIn"/>
                     <a v-if="restaurants.length > 3" href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
+                    <label v-if="restaurants.length == 0">No restaurants found in this area.</label>
                 </div>
                 <div class="result">
                     <div class="header">
@@ -62,6 +67,7 @@
                     </div>
                     <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)" :isLoggedIn="isLoggedIn"/>
                     <a v-if="activities.length > 3" href="">See {{ activities.length - 3 }} additional activities ...</a>
+                    <label v-if="activities.length == 0">No activities found in this area.</label>
                 </div>
             </div>
             <div class="map">
@@ -92,7 +98,6 @@ export default {
     },
     data: () => ({
         favoriteIcon: require('../assets/heart.svg'),
-        search: {"location": {}, "budgetAmount": 0},
         accomodations: [],
         restaurants: [],
         activities: [],
@@ -102,42 +107,12 @@ export default {
             "restaurants": [],
             "activities": []
         },
-        centerGoogleMap: { lat: 48.854, lng: 2.347 }
+        centerGoogleMap: { lat: 48.854, lng: 2.347 },
+        currentSearch: {"location": {}, "budgetAmount": 0}
     }),
     mounted () {
-        const currentSearch = JSON.parse(localStorage.getItem('search'))[0];
-        this.centerGoogleMap = { lat: currentSearch.location.lat, lng: currentSearch.location.lng };
-        this.search = currentSearch;
-        AccomodationsApi.getAccomodations(currentSearch.location.lat, currentSearch.location.lng, currentSearch.budgetAmount).then(accomodations => {
-            if (accomodations.length) {
-                this.accomodations = accomodations;
-                // Set Google Map markers
-                this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
-                    "lat": parseFloat(accomodation.lat),
-                    "lng": parseFloat(accomodation.lng)
-                }))
-            }
-        });
-        RestaurantsApi.getRestaurants(currentSearch.location.city).then(restaurants => {
-            if (restaurants.length) {
-                this.restaurants = restaurants;
-                // Set Google Map markers
-                this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
-                    "lat": parseFloat(restaurant.lat),
-                    "lng": parseFloat(restaurant.lng)
-                }))
-            }
-        });
-        ActivitiesApi.getActivities(currentSearch.location.lat, currentSearch.location.lng).then(activities => {
-            if (activities.length) {
-                this.activities = activities;
-                // Set Google Map markers
-                this.markers.activities = this.activities.slice(0, 3).map(activity => ({
-                    "lat": parseFloat(activity.lat),
-                    "lng": parseFloat(activity.lng)
-                }))
-            }
-        })
+        this.currentSearch = JSON.parse(localStorage.getItem('search'))[0];
+        this.loadRessources(this.currentSearch);
         if (this.isLoggedIn) {
             Favorites.getFavorites().then((favorites) => {
                 this.favorites = favorites
@@ -145,11 +120,50 @@ export default {
         }
     },
     methods: {
+        loadRessources(search) {
+            this.centerGoogleMap = { lat: search.location.lat, lng: search.location.lng };
+            AccomodationsApi.getAccomodations(search.location.lat, search.location.lng, search.budgetAmount).then(accomodations => {
+                if (accomodations) {
+                    this.accomodations = accomodations;
+                    // Set Google Map markers
+                    this.markers.accomodations = this.accomodations.slice(0,3).map(accomodation => ({
+                        "lat": parseFloat(accomodation.lat),
+                        "lng": parseFloat(accomodation.lng)
+                    }))
+                }
+            });
+            RestaurantsApi.getRestaurants(search.location.city).then(restaurants => {
+                if (restaurants) {
+                    this.restaurants = restaurants;
+                    // Set Google Map markers
+                    this.markers.restaurants = this.restaurants.slice(0,3).map(restaurant => ({
+                        "lat": parseFloat(restaurant.lat),
+                        "lng": parseFloat(restaurant.lng)
+                    }))
+                }
+            });
+            ActivitiesApi.getActivities(search.location.lat, search.location.lng).then(activities => {
+                if (activities) {
+                    this.activities = activities;
+                    // Set Google Map markers
+                    this.markers.activities = this.activities.slice(0, 3).map(activity => ({
+                        "lat": parseFloat(activity.lat),
+                        "lng": parseFloat(activity.lng)
+                    }))
+                }
+            })
+        },
         checkIsFavorite(item) {
             if (this.favorites.length) {
                 return this.favorites.some((favorite) => favorite.ressourceId === item.id && favorite.type === item.type);
             }
             return false;
+        },
+        updateCurrentSearch(searchId) {
+            const searchs = JSON.parse(localStorage.getItem('search'));
+            const index = searchs.findIndex(search => search.id == searchId);
+            this.currentSearch = searchs[index];
+            this.loadRessources(this.currentSearch);
         }
     }
 };

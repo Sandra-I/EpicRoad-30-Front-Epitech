@@ -28,8 +28,8 @@ export default {
                 "street_number": place.address_components[0].short_name,
                 "street": place.address_components[1].short_name,
                 "city": place.address_components[2].short_name,
-                "zip_code": (place.address_components[6]) ? place.address_components[6].short_name : '',
-                "country": place.address_components[5].long_name,
+                "zip_code": (place.address_components[6]) ? place.address_components[6].short_name : "",
+                "country": (place.address_components[5]) ? place.address_components[5].long_name: "",
                 "lat": place.geometry.location.lat(),
                 "lng": place.geometry.location.lng()
             }
@@ -48,6 +48,6 @@ export default {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background-color: #f5f5f5;
+    background-color: #ececec;
 }
 </style>

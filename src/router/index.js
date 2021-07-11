@@ -6,6 +6,7 @@ import Signup from '../views/Signup.vue'
 import Result from '../views/Result.vue'
 import Detail from '../views/Detail.vue'
 import Favorite from '../views/Favorite.vue'
+import LegalMentions from '../views/LegalMentions.vue'
 
 Vue.use(VueRouter)
 
@@ -42,6 +43,11 @@ const routes = [
 		meta: {
 			requiresAuth: true
 		}
+	},
+	{
+		path: '/legalMentions',
+		name: 'LegalMentions',
+		component: LegalMentions
 	}
 ]
 

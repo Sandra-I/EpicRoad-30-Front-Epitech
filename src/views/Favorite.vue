@@ -2,9 +2,16 @@
     <div class="favorite">
         <h2>All your favorites</h2>
         <v-row class="favorites">
-            <v-col cols="12" xs="12" sm="12" md="12" lg="6" class="favorite" v-for="favorite in favorites" :key="favorite.id">
-                <ResultPreview :result="favorite" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" @remove="removeFavorite(favorite)"/>
-            </v-col>
+            <template v-if="hasFavorite">
+                <v-col cols="12" xs="12" sm="12" md="12" lg="6" class="favorite" v-for="favorite in favorites" :key="favorite.id">
+                    <ResultPreview :result="favorite" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" @remove="removeFavorite(favorite)"/>
+                </v-col>
+            </template>
+            <template v-else>
+                <v-col cols="12" xs="12" sm="12" md="12" lg="6" class="favorite">
+                    <p>No favorite yet!</p>
+                </v-col>
+            </template>
         </v-row>
     </div>
 </template>
@@ -23,9 +30,11 @@ export default {
     },
     data: () => ({
         favorites: [],
+        hasFavorite: false
     }),
     mounted() {
         Favorites.getFavorites().then((favorites) => {
+            if (!Object.keys(favorites).length === 0) this.hasFavorite = true;
             favorites.forEach((favorite) => {
                 switch (favorite.type) {
                     case "accomodation":

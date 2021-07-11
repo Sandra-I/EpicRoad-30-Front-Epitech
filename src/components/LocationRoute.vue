@@ -1,8 +1,8 @@
 <template>
-    <div class="route">
+    <div v-if="routes.length" class="route">
         <ul>
             <li v-for="route in routes" v-bind:key="route.id">
-                <div class="route-container" v-bind:class="{active: route.id == currentSearch.id}" @click="updateCurrentSearch(route.id)">
+                <div class="route-container" v-bind:class="{active: currentSearch && route.id == currentSearch.id}" @click="updateCurrentSearch(route.id)">
                     <label>{{ route.location.formatted_address }}</label>
                     <div class="details">
                         <div>
@@ -16,54 +16,51 @@
                                 >Budget : {{ route.budgetAmount }} €</span
                             >
                         </div>
-                        <div class="selection">
-                            <img alt="restaurant logo" :src="restaurantIcon" />
-                            <img alt="bicycle logo" :src="activityIcon" />
-                            <img alt="bed logo" :src="bedIcon" />
-                        </div>
                     </div>
                 </div>
             </li>
         </ul>
-        <div class="d-flex justify-space-between align-end">
-            <a class="edit-route" @click="$router.push('/')">Edit this route</a>
-            <div class="transports">
+        <v-row  class="d-flex justify-space-between align-end">
+            <v-col cols="12" xs="12" sm="12" md="4" lg="4" v-if="!inMenu">
+                <a class="link-route" @click="$router.push('/')">Edit this route</a>
+            </v-col>
+            <v-col cols="12" xs="12" sm="12" md="8" lg="8" class="transports" v-if="routes.length > 1">
                 <div class="transport-details">
                     <div>
-                        <img class="car" src="../assets/car.svg" /><label>{{
+                        <img class="car" :src="carIcon" /><label>{{
                             transports.driving
                         }}</label>
                     </div>
                     <div>
-                        <img src="../assets/bicycle-dark.svg" /><label>{{
+                        <img :src="bicycleIcon" /><label>{{
                             transports.bicycling
                         }}</label>
                     </div>
                     <div>
-                        <img src="../assets/walking.svg" /><label>{{
+                        <img :src="walkingIcon" /><label>{{
                             transports.walking
                         }}</label>
                     </div>
                 </div>
                 <a
-                    class="edit-route"
+                    class="link-route"
                     v-bind:href="googleThisRoute()"
-                    target="_blank"
-                    >See the complete route</a
-                >
-            </div>
-        </div>
+                    target="_blank">
+                    See the complete route
+                </a>
+            </v-col>
+        </v-row>
     </div>
 </template>
 
 <script>
 import moment from "moment";
-import bedIcon from "../assets/bed.svg";
-import activityIcon from "../assets/bicycle.svg";
-import restaurantIcon from "../assets/restaurant.svg";
-import bedIconLight from "../assets/bed-light.svg";
-import activityIconLight from "../assets/bicycle-light.svg";
-import restaurantIconLight from "../assets/restaurant-light.svg";
+import carIcon from "../assets/car.svg";
+import bicycleIcon from "../assets/bicycle-dark.svg";
+import walkingIcon from "../assets/walking.svg";
+import carIconLight from "../assets/car-light.svg";
+import bicycleIconLight from "../assets/bicycle-light.svg";
+import walkingIconLight from "../assets/walking-light.svg";
 import Transports from "@/api/transports";
 
 export default {
@@ -71,9 +68,9 @@ export default {
     props: ["inMenu", "currentSearch"],
     data: (vm) => ({
         routes: [],
-        bedIcon: vm.inMenu ? bedIconLight : bedIcon,
-        restaurantIcon: vm.inMenu ? restaurantIconLight : restaurantIcon,
-        activityIcon: vm.inMenu ? activityIconLight : activityIcon,
+        carIcon: vm.inMenu ? carIconLight : carIcon,
+        walkingIcon: vm.inMenu ? walkingIconLight : walkingIcon,
+        bicycleIcon: vm.inMenu ? bicycleIconLight : bicycleIcon,
         transports: {
             driving: "",
             bicycling: "",
@@ -81,40 +78,43 @@ export default {
         }
     }),
     created: function () {
-        this.routes = JSON.parse(localStorage.getItem("search"));
+        const serches = JSON.parse(localStorage.getItem("search"))
+        this.routes = serches ? serches : [];
     },
     mounted() {
-        const origin = {
-            lat: this.routes[0].location.lat,
-            lng: this.routes[0].location.lng,
-        };
-        const destination = {
-            lat: this.routes[this.routes.length - 1].location.lat,
-            lng: this.routes[this.routes.length - 1].location.lng,
-        };
-        const waypoints = this.routes
-            .filter(
-                (_route, index) => index != 0 && index != this.routes.length - 1
-            )
-            .map((route) => {
-                return { lat: route.location.lat, lng: route.location.lng };
+        if (this.routes.length) {
+            const origin = {
+                lat: this.routes[0].location.lat,
+                lng: this.routes[0].location.lng,
+            };
+            const destination = {
+                lat: this.routes[this.routes.length - 1].location.lat,
+                lng: this.routes[this.routes.length - 1].location.lng,
+            };
+            const waypoints = this.routes
+                .filter(
+                    (_route, index) => index != 0 && index != this.routes.length - 1
+                )
+                .map((route) => {
+                    return { lat: route.location.lat, lng: route.location.lng };
+                });
+            
+            const modes = ["driving", "bicycling", "walking"];
+            modes.forEach((mode) => {
+                Transports.getTravelTimeDuration(
+                    origin,
+                    destination,
+                    waypoints,
+                    mode
+                ).then((infos) => {
+                    const durationToHours = Math.floor(infos.duration / 60 / 60);
+                    const restInMinutes = (durationToHours > 0 ) ? parseInt((infos.duration % (durationToHours * 3600)) / 60) : parseInt(infos.duration / 60);
+                    this.transports[mode] = parseInt(infos.distance / 1000) + " km in ";
+                    this.transports[mode] += (durationToHours > 0) ? durationToHours + " h " : "",
+                    this.transports[mode] += restInMinutes + " min";
+                });
             });
-        
-        const modes = ["driving", "bicycling", "walking"];
-        modes.forEach((mode) => {
-            Transports.getTravelTimeDuration(
-                origin,
-                destination,
-                waypoints,
-                mode
-            ).then((infos) => {
-                const durationToHours = Math.floor(infos.duration / 60 / 60);
-                const restInMinutes = (durationToHours > 0 ) ? parseInt((infos.duration % (durationToHours * 3600)) / 60) : parseInt(infos.duration / 60);
-                this.transports[mode] = parseInt(infos.distance / 1000) + " km in ";
-                this.transports[mode] += (durationToHours > 0) ? durationToHours + " h " : "",
-                this.transports[mode] += restInMinutes + " min";
-            });
-        });
+        }
     },
     methods: {
         formatDate(date) {
@@ -161,7 +161,7 @@ export default {
             display: inline-block;
             position: absolute;
             left: 16px;
-            top: 28px;
+            top: 25px;
             height: calc(100% - 90px);
             border-left: dashed 3px var(--v-primary-base);
         }
@@ -216,7 +216,7 @@ export default {
         }
     }
 
-    .edit-route {
+    .link-route {
         display: block;
         text-align: left;
         margin-top: 40px;
@@ -230,10 +230,11 @@ export default {
         }
         .transport-details {
             display: flex;
+            justify-content: flex-end;
             div {
                 margin-left: 30px;
                 display: flex;
-                align-items: center;
+                align-items: right;
             }
             img {
                 height: 20px;

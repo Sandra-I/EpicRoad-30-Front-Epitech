@@ -18,11 +18,12 @@
                 </v-btn>
             </v-col>
         </v-row>
-        <LocationRoute :inMenu="true" />
+        <LocationRoute :inMenu="true"/>
         <ul class="footer-mobile">
-            <li>Login</li>
-            <li>Register</li>
-            <li>Profile</li>
+            <li v-if="!isLoggedIn" @click="redirectFooter('/login')">Login</li>
+            <li v-if="!isLoggedIn" @click="redirectFooter('/signup')">Register</li>
+            <li v-if="isLoggedIn" @click="redirectFooter('/favorites')">Favorites</li>
+            <li v-if="isLoggedIn" @click="logout()">Logout</li>
         </ul>
     </div>
 </template>
@@ -32,12 +33,23 @@ import LocationRoute from "@/components/LocationRoute.vue";
 
 export default {
     name: "MobileMenu",
+    props: {
+        isLoggedIn: Boolean
+    },
     components: {
         LocationRoute,
     },
     methods: {
         hideMobileMenu: function () {
             return this.$emit("onHiddenMobileMenu", true);
+        },
+        redirectFooter: function (page) {
+            this.$router.push(page);
+            this.hideMobileMenu();
+        },
+        logout: function () {
+            this.$emit('logout');
+            this.hideMobileMenu();
         }
     }
 };
@@ -48,9 +60,9 @@ export default {
     background-color: var(--v-primary-base);
     padding: 20px 10vw;
     min-height: 100vh;
+    color: #FFF;
 
     ul {
-        color: #FFF;
         list-style-type: none;
         text-align: left;
 
@@ -66,6 +78,12 @@ export default {
 
             label {
                 font-weight: 600;
+            }
+
+            .route-container {
+                &.active {
+                    background-color: #4380cf;
+                }
             }
         }
     }
@@ -101,6 +119,7 @@ export default {
             font-weight: normal;
             font-size: 18px;
             margin-top: 10px;
+            cursor: pointer;
         }
     }
 }

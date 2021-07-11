@@ -3,10 +3,10 @@
         <v-row justify="space-between"  align="center">
             <v-col cols="12" xs="12" sm="12" md="12" lg="12">
                 <v-row justify="center" align="center">
-                    <v-col cols="6" xs="6" sm="6" md="5" lg="5">
+                    <v-col cols="12" xs="12" sm="12" md="5" lg="5">
                         <AddressInput @autocomplete="onUpdateLocation" :savedAddress="formattedAddress"/>
                     </v-col>
-                    <v-col cols="4" xs="4" sm="4" md="4" lg="4">
+                    <v-col cols="6" xs="6" sm="6" md="4" lg="4">
                         <v-row>
                             <v-col cols="6" xs="6" sm="6" md="6" lg="6" class="attached">
                                 <v-menu
@@ -106,7 +106,7 @@
                             </v-col>
                         </v-row>
                     </v-col>
-                    <v-col cols="3" xs="3" sm="3" md="3" lg="3">
+                    <v-col cols="6" xs="6" sm="6" md="3" lg="3">
                         <v-row>
                             <v-col cols="10" xs="10" sm="10" md="10" lg="10">
                                 <v-text-field

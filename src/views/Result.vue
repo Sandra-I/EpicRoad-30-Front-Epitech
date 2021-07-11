@@ -43,13 +43,15 @@
                 </div>
             </div>
         </div>
-        <div class="section d-flex">
+        <v-row class="section d-flex">
             <div class="results">
                 <div class="result">
                     <div class="header">
                         <h3>Accomodations</h3>
                     </div>
-                    <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)" :isLoggedIn="isLoggedIn"/>
+                    <v-row>
+                        <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)" :isLoggedIn="isLoggedIn"/>
+                    </v-row>
                     <a v-if="accomodations.length > 3" href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
                     <label v-if="accomodations.length == 0">No accomodations found in this area.</label>
                 </div>
@@ -57,7 +59,9 @@
                     <div class="header">
                         <h3>Bars & Restaurants</h3>
                     </div>
-                    <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)" :isLoggedIn="isLoggedIn"/>
+                    <v-row>
+                        <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)" :isLoggedIn="isLoggedIn"/>
+                    </v-row>
                     <a v-if="restaurants.length > 3" href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
                     <label v-if="restaurants.length == 0">No restaurants found in this area.</label>
                 </div>
@@ -65,7 +69,9 @@
                     <div class="header">
                         <h3>Activities</h3>
                     </div>
-                    <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)" :isLoggedIn="isLoggedIn"/>
+                    <v-row>
+                        <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)" :isLoggedIn="isLoggedIn"/>
+                    </v-row>
                     <a v-if="activities.length > 3" href="">See {{ activities.length - 3 }} additional activities ...</a>
                     <label v-if="activities.length == 0">No activities found in this area.</label>
                 </div>
@@ -73,7 +79,7 @@
             <div class="map">
                 <GoogleMap :markers="markers" :center="centerGoogleMap"/>
             </div>
-        </div>
+        </v-row>
     </div>
 </template>
 
@@ -279,6 +285,27 @@ export default {
         margin-bottom: -250px;
         .vue-map {
             border-radius: 20px 0 0 0;
+        }
+    }
+
+}
+
+@media screen and (max-width: 960px) {
+    .result {
+
+        .results {
+            width: 100%;    
+        }
+
+        .map {
+            height: 70vh;
+            width: 100%;
+            padding-left: 0;
+            margin-right: 0;
+            margin-top: 100px;
+            .vue-map {
+                border-radius: 10px 10px 0 0;
+            }
         }
     }
 }

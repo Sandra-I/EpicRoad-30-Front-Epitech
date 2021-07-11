@@ -5,8 +5,8 @@
             <v-col
                 v-for="item in cardGroup.items"
                 :key="item.id"
-                :cols="3"
                 class="mb-10"
+                cols="6" xs="6" sm="6" md="6" lg="3"
             >
                 <v-card @click="$router.push('/detail/'+item.type+'/'+item.id)">
                     <v-img

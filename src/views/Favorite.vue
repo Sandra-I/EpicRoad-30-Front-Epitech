@@ -1,11 +1,10 @@
 <template>
     <div class="favorite">
         <h2>All your favorites</h2>
-        <v-row class="favorites">
-            <v-col cols="12" xs="12" sm="12" md="12" lg="6" class="favorite" v-for="favorite in favorites" :key="favorite.id">
-                <ResultPreview :result="favorite" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" :isLoggedIn="isLoggedIn" @remove="removeFavorite(favorite)"/>
-            </v-col>
+        <v-row class="favorites" v-if="favorites.length">
+            <ResultPreview :result="favorite" v-for="favorite in favorites" :key="favorite.id" :route="'/detail/' + favorite.type + '/' + favorite.ressourceId" :isFavorite="true" :isLoggedIn="isLoggedIn" @remove="removeFavorite(favorite)"/>
         </v-row>
+        <span v-else>No favorites to display.</span>
     </div>
 </template>
 
@@ -68,13 +67,20 @@ export default {
     h2 {
         margin-bottom: 50px;
     }
-    .trips {
-        display: flex;
-        margin-bottom: 50px;
-    }
-    .detail-trips {
-        .detail {
-            margin-bottom: 100px;
+}
+
+@media screen and (min-width: 960px) {
+    .favorite {
+        .favorites {
+            .result-preview {
+                max-width: 50%;
+                &:nth-child(2n) {
+                    padding-left: 3%;
+                }
+                &:nth-child(2n+1) {
+                    padding-right: 3%;
+                }
+            }
         }
     }
 }

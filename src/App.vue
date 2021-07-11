@@ -7,7 +7,7 @@
             </div>
             <Footer />
         </div>
-        <MobileMenu v-if="!hideMobileMenu" @onHiddenMobileMenu="onHiddenMobileMenu"/>
+        <MobileMenu v-if="!hideMobileMenu" @onHiddenMobileMenu="onHiddenMobileMenu" :isLoggedIn="isLoggedIn" @logout="logout"/>
     </v-app>
 </template>
 

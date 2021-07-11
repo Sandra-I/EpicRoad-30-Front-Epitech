@@ -1,5 +1,5 @@
 <template>
-    <div class="result-preview" @click="getDetailRoute()">
+    <v-col class="result-preview" @click="getDetailRoute()" cols="12" xs="12" sm="6" md="12" lg="12">
         <div class="square">
             <img v-if="!result.img" alt="accomodation 1" src="../assets/img_placeholder.jpg"/>
             <img v-if="result.img" alt="accomodation 1" :src="result.img" />
@@ -11,10 +11,11 @@
             <span v-if="result.description" class="description">{{ result.description }}</span>
             <div class="price">
                 <span v-if="result.price_detail">{{ result.price_detail }}</span>
-                <span v-if="result.total" class="total">Price : Starting at {{ result.total }} €</span>
+                <span v-if="isNaN(result.total)" class="price">Average Price : {{ result.total }}</span>
+                <span v-else class="price">Price : Starting at {{ result.total }} €</span>
             </div>
         </div>
-    </div>
+    </v-col>
 </template>
 
 <script>

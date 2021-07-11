@@ -4,16 +4,16 @@
         <div
             class="status"
             v-bind:class="{
-                open: item.status == 'open',
-                close: item.status == 'close',
+                open: item.opening.isOpen,
+                close: !item.opening.isOpen
             }"
         >
-            <span>{{ item.status }}</span>
+            <span>{{ getStatus() }}</span>
         </div>
         <ul class="opening">
-            <li v-for="openingHour in item.opening" :key="openingHour.days">
+            <li v-for="openingHours in item.opening.timeframes" :key="openingHours.days">
                 <img src="../../assets/clock.svg"/>
-                <span>{{ openingHour.days }} from {{ getHoursInterval(openingHour.hours) }}</span>
+                <span>{{ openingHours.days }} from {{ getHoursInterval(openingHours.open) }}</span>
             </li>
         </ul>
     </div>
@@ -26,9 +26,15 @@ export default {
     methods: {
         getHoursInterval(hours) {
             if (Array.isArray(hours)) {
-                return hours.join(" and ")
+                if (hours[0].renderedTime) {
+                    return hours.map(hour => hour.renderedTime).join(" and ");
+                }
+                return hours.join(" and ");
             }
             return hours;
+        },
+        getStatus() {
+            return (this.item.opening.isOpen) ? "Open" : "Closed";
         }
     }
 };
@@ -37,8 +43,8 @@ export default {
 <style lang="scss">
 .opening-hours {
     .status {
-        width: 100px;
-        padding: 10px 20px;
+        width: 110px;
+        padding: 10px 0;
         text-align: center;
         text-transform: uppercase;
         font-weight: bold;
@@ -49,7 +55,8 @@ export default {
             color: #04bf68;
         }
         &.close {
-            padding-left: 5% !important;
+            background-color: #db524d;
+            color: #ffffff;
         }
     }
     .opening {

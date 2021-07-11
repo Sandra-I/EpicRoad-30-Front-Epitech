@@ -3,14 +3,12 @@
         <GmapMap
             :center="center"
             :zoom="13"
-            :options="{
-                disableDefaultUI: true,
-            }"
+            :options="options"
             style="width: 100%; height: 100%"
         >
             <GmapMarker
-                :key="'accomodation'+index"
                 v-for="(m, index) in markers.accomodations"
+                :key="'accomodation'+index"
                 :position="m"
                 :icon="bedIcon"
             />
@@ -26,6 +24,10 @@
                 :position="m"
                 :icon="activityIcon"
             />
+            <GmapMarker
+                v-if="markers.single"
+                :position="markers.single"
+            />
         </GmapMap>
     </div>
 </template>
@@ -37,13 +39,19 @@ import restaurantIcon from "../assets/restaurant-map.png";
 
 export default {
     name: "GoogleMap",
-    props: ["markers","center"],
-    data() {
-        return {
-            bedIcon: bedIcon,
-            activityIcon: activityIcon,
-            restaurantIcon: restaurantIcon
-        };
+    props: ["markers","center","mapStyleId"],
+    data: () => ({
+        bedIcon: bedIcon,
+        activityIcon: activityIcon,
+        restaurantIcon: restaurantIcon,
+        options: {
+            disableDefaultUI: true
+        }
+    }),
+    mounted() {
+        if (this.mapStyleId) {
+            this.options.mapId = this.mapStyleId
+        }
     }
 };
 </script>

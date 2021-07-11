@@ -105,11 +105,12 @@ const restaurants = {
             id: data.id,
             name: data.name,
             address: restaurants.getAddress(data),
-            price: data.price.message,
+            total: data.price.message,
             website: data.shortUrl,
             phone: data.contact.formattedPhone,
+            social: restaurants.getSocial(data.contact),
             img: [img],
-            opening: data.seasonalHours,
+            opening: data.hours,
             attributes: restaurants.getAttributes(data.attributes),
             lat: data.location.lat,
             lng: data.location.lng,
@@ -135,6 +136,20 @@ const restaurants = {
         })
         return formattedAttributes;
     },
+
+    getSocial: (contact) => {
+        var social = [];
+        if (contact.twitter && contact.twitter != "") {
+            social["twitter"] = contact.twitter;
+        }
+        if (contact.instagram && contact.instagram != "") {
+            social["instagram"] = contact.instagram;
+        }
+        if (contact.facebookUsername && contact.facebookUsername != "") {
+            social["facebook"] = contact.facebookUsername;
+        }
+        return social;
+    }
 
 };
 

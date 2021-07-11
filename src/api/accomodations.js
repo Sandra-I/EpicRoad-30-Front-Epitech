@@ -53,10 +53,14 @@ const accomodations = {
             phone: accomodations.formatPhone(data.hotel.contact.phone),
             img: data.hotel.media.map(media => media.uri),
             description: data.hotel.description.text,
-            status: "open",
+            opening: {
+                isOpen: true
+            },
             attributes: data.hotel.amenities.map(amenity => amenity.toLowerCase()),
             email: data.hotel.contact.email,
-            rating: parseFloat(data.hotel.rating).toFixed(2)
+            rating: parseFloat(data.hotel.rating).toFixed(2),
+            lat: data.hotel.latitude,
+            lng: data.hotel.longitude
         }
     },
 

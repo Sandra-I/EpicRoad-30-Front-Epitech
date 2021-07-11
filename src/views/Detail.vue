@@ -9,7 +9,7 @@
                 md="6"
                 lg="6"
             >
-                <ImagePreview :item="item" />
+                <ImagePreview v-if="item.img && item.img.length" :item="item" />
             </v-col>
             <v-col
                 class="right section margin-bottom"
@@ -67,7 +67,7 @@
                 />
             </v-col>
             <v-col
-                v-if="item.status || item.opening || item.social || item.phone"
+                v-if="item.opening || item.social || item.phone"
                 class="right section"
                 cols="12"
                 xs="12"
@@ -76,7 +76,7 @@
                 lg="6"
             >
                 <OpeningHours
-                    v-if="item.status || item.opening"
+                    v-if="item.opening"
                     :item="item"
                     class="sub-section"
                 />
@@ -90,6 +90,9 @@
         <v-row v-if="item.reviews">
             <Reviews :item="item" />
         </v-row>
+        <div class="map">
+            <GoogleMap :markers="markers" :center="centerGoogleMap" :mapStyleId="mapStyleId"/>
+        </div>
     </div>
 </template>
 
@@ -104,12 +107,7 @@ import Reviews from "@/components/detail/Reviews.vue";
 import accomodationsApi from "@/api/accomodations";
 import restaurantsApi from "@/api/restaurants";
 import activitiesApi from "@/api/activities";
-
-import photo1 from "../assets/molitor.png";
-import photo2 from "../assets/molitor-2.jpg";
-import photo3 from "../assets/molitor-3.jpg";
-import photo4 from "../assets/molitor-4.jpg";
-import profile from "../assets/review-profile.svg";
+import GoogleMap from '@/components/GoogleMap.vue';
 
 export default {
     name: "Detail",
@@ -121,88 +119,13 @@ export default {
         Attributes,
         Contact,
         Reviews,
+        GoogleMap
     },
     data: () => ({
-        item: {
-            name: "Hôtel Molitor Paris",
-            price: "€€€€",
-            website: "https://www.mltr.fr",
-            phone: "01 56 07 08 50",
-            img: [photo1, photo2, photo3, photo4],
-            description:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleifend elementum. Fusce laoreet, diam sit amet rhoncus commodo, risus ipsum pellentesque massa, vitae lacinia lectus dolor et ante. Integer feugiat mauris sit amet tempus maximus. ",
-            status: "open",
-            opening: [
-                {
-                    days: "Monday - Friday",
-                    hours: ["10:30 AM - 2:30 PM", "6:00 PM - 11h30 PM"],
-                },
-                {
-                    days: "Saturday - Sunday",
-                    hours: "10:30 AM - 11:30 PM",
-                },
-            ],
-            attributes: [
-                "attribute1",
-                "attribute2",
-                "attribute3",
-                "attribute4",
-                "attribute5",
-                "attribute6",
-                "attribute7",
-            ],
-            social: {
-                instagram: "@molitor_paris",
-                facebook: "hotle_molitor_paris",
-                twitter: "@molitor_paris",
-            },
-            reviews: [
-                {
-                    profile: {
-                        img: profile,
-                        name: "Paul",
-                    },
-                    title: "Very good place !",
-                    content:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife.",
-                    date: "2021-06-12",
-                    note: "Excellent",
-                },
-                {
-                    profile: {
-                        img: profile,
-                        name: "Karine",
-                    },
-                    title: "Brillant.",
-                    content:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife.",
-                    date: "2021-03-08",
-                    note: "Excellent",
-                },
-                {
-                    profile: {
-                        img: profile,
-                        name: "Carla",
-                    },
-                    title: "Beautiful place.",
-                    content:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife. Integer feugiat mauris sit amet tempus maximus.<br><br>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife. Integer feugiat mauris sit amet tempus maximus.",
-                    date: "2021-03-01",
-                    note: "Excellent",
-                },
-                {
-                    profile: {
-                        img: profile,
-                        name: "Baptiste",
-                    },
-                    title: "Very good service.",
-                    content:
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife. Integer feugiat mauris sit amet tempus maximus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent dignissim bibendum eros, nec finibus augue eleifend feugiat. In malesuada eleife. Integer feugiat mauris sit amet tempus maximus.",
-                    date: "2021-02-04",
-                    note: "Excellent",
-                },
-            ],
-        },
+        item: [],
+        markers: [],
+        centerGoogleMap: { lat: 48.854, lng: 2.347 },
+        mapStyleId: "aec396dc89a6c7f1"
     }),
     mounted() {
         if (this.$route.params.type && this.$route.params.id) {
@@ -214,6 +137,8 @@ export default {
                         .getAccomodationById(item_id)
                         .then((accomodation) => {
                             this.item = accomodation;
+                            this.loadGoogleMap();
+
                         });
                     break;
                 case "eat":
@@ -221,6 +146,7 @@ export default {
                         .getEatById(item_id)
                         .then((restaurant) => {
                             this.item = restaurant;
+                            this.loadGoogleMap();
                         })
                         .catch((e) => {
                             console.log(e);
@@ -229,16 +155,24 @@ export default {
                 case "drink":
                     restaurantsApi.getDrinkById(item_id).then((restaurant) => {
                         this.item = restaurant;
+                        this.loadGoogleMap();
                     });
                     break;
                 case "activity":
                     activitiesApi.getActivityById(item_id).then((activity) => {
                         this.item = activity;
+                        this.loadGoogleMap();
                     });
                     break;
             }
         }
     },
+    methods: {
+        loadGoogleMap() {
+            this.markers["single"] = { lat: this.item.lat, lng: this.item.lng };
+            this.centerGoogleMap = { lat: this.item.lat, lng: this.item.lng };
+        }
+    }
 };
 </script>
 
@@ -256,6 +190,13 @@ export default {
         }
         .sub-section {
             margin-bottom: 80px;
+        }
+    }
+
+    .map {
+        height: 70vh;
+        .vue-map {
+            border-radius: 20px 0 0 0;
         }
     }
 }

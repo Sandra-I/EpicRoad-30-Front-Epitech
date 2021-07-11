@@ -58,7 +58,7 @@ const activities = {
             name: data.name,
             rating: parseFloat(data.rating).toFixed(2),
             description: data.shortDescription,
-            total: (data.price) ? parseInt(data.price.amount).toFixed(2) : "",
+            total: (data.price) ? parseFloat(data.price.amount).toFixed(2) : "",
             website: data.bookingLink,
             lat: (data.geoCode) ? data.geoCode.latitude : "",
             lng: (data.geoCode) ? data.geoCode.longitude: ""

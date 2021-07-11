@@ -15,7 +15,8 @@
                 <img v-else src="../../assets/star-empty.svg" />
                 <span class="numeric">{{ item.rating }}</span>
             </div>
-            <span v-if="item.total" class="price">Price : Starting at {{ item.total }} €</span>
+            <span v-if="isNaN(item.total)" class="price">Average Price : {{ item.total }}</span>
+            <span v-else class="price">Price : Starting at {{ item.total }} €</span>
         </div>
         <div class="subsection" v-if="item.address || item.website">
             <span>{{ item.address }}</span>

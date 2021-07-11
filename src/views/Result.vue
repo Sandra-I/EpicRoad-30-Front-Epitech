@@ -52,7 +52,7 @@
                         </v-btn>
                     </div>
                     <ResultPreview  v-for="(accomodation, index) in accomodations.slice(0, 3)" :key="index" :result="accomodation" :route="'/detail/accomodation/'+accomodation.id" :isFavorite="checkIsFavorite(accomodation)"/>
-                    <a href="">See {{ accomodations.length - 3 }} additional accommodations ...</a>
+                    <router-link :to="{ path: '/more-results', query: { moreResults: accomodations }}">See {{ accomodations.length - 3 }} additional accommodations ...</router-link>
                 </div>
                 <div class="result">
                     <div class="header">
@@ -63,7 +63,7 @@
                         </v-btn>
                     </div>
                     <ResultPreview v-for="(restaurant, index) in restaurants.slice(0, 3)" :key="index" :result="restaurant" :route="'/detail/'+restaurant.type+'/'+restaurant.id" :isFavorite="checkIsFavorite(restaurant)"/>
-                    <a href="">See {{ restaurants.length - 3 }} additional restaurants ...</a>
+                    <router-link :to="{ path: '/more-results', query: { moreResults: restaurants }}">See {{ restaurants.length - 3 }} additional restaurants ...</router-link>
                 </div>
                 <div class="result">
                     <div class="header">
@@ -74,7 +74,8 @@
                         </v-btn>
                     </div>
                     <ResultPreview v-for="(activity, index) in activities.slice(0, 3)" :key="index" :result="activity" :route="'/detail/activity/'+activity.id" :isFavorite="checkIsFavorite(activity)"/>
-                    <a href="">See {{ activities.length - 3 }} additional activities ...</a>
+                    <router-link :to="{ path: '/more-results', query: { moreResults: activities }}">See {{ activities.length - 3 }} additional activities ...</router-link>
+                    
                 </div>
             </div>
             <div class="map">

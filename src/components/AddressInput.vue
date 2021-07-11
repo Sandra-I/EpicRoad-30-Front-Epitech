@@ -17,24 +17,31 @@ export default {
         savedAddress: String
     },
     mounted() {
-        this.autocomplete = new window.google.maps.places.Autocomplete(
-            this.$refs.autocomplete,
-            { types: ["geocode"] }
-        );
-        this.autocomplete.addListener("place_changed", () => {
-            const place = this.autocomplete.getPlace();
-            const address = {
-                "formatted_address": place.formatted_address,
-                "street_number": place.address_components[0].short_name,
-                "street": place.address_components[1].short_name,
-                "city": place.address_components[2].short_name,
-                "zip_code": (place.address_components[6]) ? place.address_components[6].short_name : "",
-                "country": (place.address_components[5]) ? place.address_components[5].long_name: "",
-                "lat": place.geometry.location.lat(),
-                "lng": place.geometry.location.lng()
-            }
-            this.$emit('autocomplete', address)
-        });
+        this.$loadScript(`http://maps.googleapis.com/maps/api/js?key=${process.env.VUE_APP_GOOGLE_API_KEY}&libraries=places`)
+            .then(() => {
+                this.autocomplete = new window.google.maps.places.Autocomplete(
+                    this.$refs.autocomplete,
+                    { types: ["geocode"] }
+                );
+                this.autocomplete.addListener("place_changed", () => {
+                    const place = this.autocomplete.getPlace();
+                    const address = {
+                        "formatted_address": place.formatted_address,
+                        "street_number": place.address_components[0].short_name,
+                        "street": place.address_components[1].short_name,
+                        "city": place.address_components[2].short_name,
+                        "zip_code": (place.address_components[6]) ? place.address_components[6].short_name : "",
+                        "country": (place.address_components[5]) ? place.address_components[5].long_name: "",
+                        "lat": place.geometry.location.lat(),
+                        "lng": place.geometry.location.lng()
+                    }
+                    this.$emit('autocomplete', address)
+                });
+            })
+            .catch(() => {
+                console.log("Google Map lib can't be loaded.")
+            });
+
     }
 };
 </script>

@@ -5,9 +5,9 @@
 				<SearchBloc/>
 			</v-col>
 		</v-row>
-		<v-row v-for="(cardTitle, index) in cardTitles" :key="index">
+		<v-row v-for="(group, index) in cards" :key="index">
 			<v-col>
-				<PreviewHomePage :titlePreviewBloc="cardTitle.title" :cardInformationArray="cards"/>
+				<PreviewHomePage :cardGroup="group"/>
 			</v-col>
 		</v-row>
 	</v-container>
@@ -16,6 +16,9 @@
 <script>
 import SearchBloc from '@/components/SearchBloc.vue';
 import PreviewHomePage from '@/components/PreviewHomePage.vue';
+import AccomodationsApi from "@/api/accomodations";
+import RestaurantsApi from "@/api/restaurants";
+import ActivitiesApi from "@/api/activities";
 
 export default {
 	name: 'Home',
@@ -25,21 +28,49 @@ export default {
 	},
 	data () {
 		return {
-			homePageTitle: 'Epic Road Trip',
-			cardTitles: [
-				{ title: 'Enjoy your life' },
-				{ title: 'Sleep like a dog' },
-				{ title: 'Travel like a bird' },
-				{ title: 'Eat enough' },
-				{ title: 'Drink like a templar' }
-			],
-			cards: [
-				{ title: 'Favorite road', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
-				{ title: 'Best', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
-				{ title: 'Best air', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' },
-				{ title: 'Best airlines', src: 'https://cdn.vuetifyjs.com/images/cards/road.jpg' }
-			],
+            cards: {
+                activities: {
+                    title: "Enjoy your life",
+                    items: []
+                },
+                accomodations: {
+                    title: "Sleep like a dog",
+                    items: []
+                },
+                eats: {
+                    title: "Eat enough",
+                    items: []
+                },
+                drinks: {
+                    title: "Drink like a templar",
+                    items: []
+                }
+            }
 		}
-	}
+	},
+    mounted () {
+        const paris_lat = 48.8558658;
+        const paris_lng = 2.3328733;
+        ActivitiesApi.getActivities(paris_lat, paris_lng).then(activities => {
+            if (activities.length) {
+                this.cards.activities.items = activities.slice(0, 4);
+            }
+        });
+        AccomodationsApi.getAccomodations(paris_lat, paris_lng).then(accomodations => {
+            if (accomodations.length) {
+                this.cards.accomodations.items = accomodations.slice(0, 4);
+            }
+        });
+        RestaurantsApi.getEats("Paris").then(eats => {
+            if (eats.length) {
+                this.cards.eats.items = eats.slice(0, 4);
+            }
+        });
+        RestaurantsApi.getDrinks("Paris").then(drinks => {
+            if (drinks.length) {
+                this.cards.drinks.items = drinks.slice(0, 4);
+            }
+        });
+    }
 }
 </script>

@@ -7,6 +7,7 @@ import Result from '../views/Result.vue'
 import Detail from '../views/Detail.vue'
 import Favorite from '../views/Favorite.vue'
 import LegalMentions from '../views/LegalMentions.vue'
+import MoreResults from '../views/MoreResults.vue'
 
 Vue.use(VueRouter)
 
@@ -45,9 +46,14 @@ const routes = [
 		}
 	},
 	{
-		path: '/legalMentions',
+		path: '/legal-mentions',
 		name: 'LegalMentions',
 		component: LegalMentions
+	},
+	{
+		path: '/more-results',
+		name: 'MoreResults',
+		component: MoreResults
 	}
 ]
 

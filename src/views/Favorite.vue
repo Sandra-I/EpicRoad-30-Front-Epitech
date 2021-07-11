@@ -34,7 +34,7 @@ export default {
     }),
     mounted() {
         Favorites.getFavorites().then((favorites) => {
-            if (!Object.keys(favorites).length === 0) this.hasFavorite = true;
+            if (Object.keys(favorites).length != 0) this.hasFavorite = true;
             favorites.forEach((favorite) => {
                 switch (favorite.type) {
                     case "accomodation":
